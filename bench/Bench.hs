@@ -20,7 +20,8 @@ main =
                       , bench "succdiff" $ nfIO (silence $ runOnFile [] "" "(%)\\. {%/Apple/}{`3:}" [] CSV "bench/data/food-prices.csv")
                       ]
                 , bgroup "stream"
-                      [ bench "path" $ nfIO (silence $ runOnFile [] "" "{|[x+'\\n'+y]|>`$}" [] (AWK (Just ":") Nothing) "bench/data/PATH")
+                      [ bench "sprintf" $ nfIO (silence $ runOnFile [] "" "{%/infix(r|l)?\\s+\\d+/}{sprintf '- fixity: %s' `0}" [] (AWK Nothing Nothing) "src/A.hs")
+                      , bench "path" $ nfIO (silence $ runOnFile [] "" "{|[x+'\\n'+y]|>`$}" [] (AWK (Just ":") Nothing) "bench/data/PATH")
                       , bench "RS" $ nfIO (silence $ runOnFile [] "" "$0" [] (AWK Nothing (Just ":")) "bench/data/PATH")
                       , bench "runOnFile" $ nfIO (silence $ runOnFile [] "" "(+)|0 {%/Bloom/}{1}" [] (AWK Nothing Nothing) "bench/data/ulysses.txt")
                       , bench "runOnFile/wc.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/wc.jac" ; runOnFile [] "examples/wc.jac" contents [] (AWK Nothing Nothing) "bench/data/ulysses.txt" })
