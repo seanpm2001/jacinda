@@ -1,3 +1,5 @@
+# 3.2.0.1
+
   * Include file in errors
   * Performance improvements
   * Fix string escaping; `\'` is allowed inside string literals
