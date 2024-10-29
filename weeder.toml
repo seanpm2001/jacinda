@@ -1,0 +1,14 @@
+roots = [
+    '^Main\.main$',
+    '^Paths_',
+    '^Parser\.happy',
+    'HappyAction',
+    '^L\.(begin|end|token|alexInputPrevChar|utf8Encode|runAlex|skip)',
+]
+unused-types = true
+
+[[root-instances]]
+class = '\.NFData$'
+
+[[root-instances]]
+module = 'L'
