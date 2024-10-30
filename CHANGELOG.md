@@ -1,3 +1,5 @@
+  * Allow decimal specifiers in format strings
+
 # 3.2.0.1
 
   * Include file in errors
