@@ -337,7 +337,7 @@ path"$0
 
 ### Define Values on the Command-Line
 
-Jacinda is powerful enough that we can jerry-rig a [RIS](https://en.wikipedia.org/wiki/RIS_(file_format)) to [.bib](https://en.wikipedia.org/wiki/BibTeX#Database_files) converter:
+We can jerry-rig a [RIS](https://en.wikipedia.org/wiki/RIS_(file_format)) to [.bib](https://en.wikipedia.org/wiki/BibTeX#Database_files) converter:
 
 ```
 :set fs:=/  -\s*/;
@@ -397,19 +397,21 @@ We can define `prettyMem` as a library function, viz.
 ```
 fn prettyMem(x) :=
   ?x>=1073741824.0
-  ;sprintf'%f GB' (x%1073741824.0)
+  ;sprintf'%f.2 GB' (x%1073741824.0)
   ;?x>=1048576.0
-   ;sprintf'%f MB' (x%1048576.0)
+   ;sprintf'%f.2 MB' (x%1048576.0)
    ;?x>=1024.0
-    ;sprintf'%f kB' (x%1024.0)
-    ;sprintf'%f b' x;
+    ;sprintf'%f.2 kB' (x%1024.0)
+    ;sprintf'%f.0 b' x;
 ```
+
+The `%f.2` format specifier limits output to two digits after the decimal point.
 
 Then:
 
 ```bash
 ls -l | ja "@include'lib/prefixSizes.jac' prettyMem((+)|0.0 {ix>1}{\`5:})"
-77.892 kB
+77.89 kB
 ```
 
 ## Vim Tags
