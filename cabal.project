@@ -7,7 +7,7 @@ program-options
   happy-options: -cs
 
 package jacinda
-  ghc-options: -j +RTS -A32m
+  ghc-options: -fregs-graph -j +RTS -A32m
 
 package lazy-csv
   ghc-options: -fregs-graph
