@@ -47,6 +47,7 @@ data EvalErr = EmptyFold
              | InternalNm (Nm T)
              | InternalArityOrEta Int (E T)
              | InternalUnexpectedStream (E T)
+             | StreamFunc (E T)
              deriving (Show)
 
 instance Exception EvalErr where
@@ -536,6 +537,7 @@ e@BB{} @> _ = pure e
 e@TB{} @> _ = pure e
 e@UB{} @> _ = pure e
 (Lam t n e) @> b = Lam t n <$> (e@>b)
+e @> _ | TyArr{} <- eLoc e = throw $ StreamFunc e
 -- basically an option can evaluate to a function... so ((option ...) x)
 -- needs to be reduced! but nothing will detect that...
 -- (when can a builtin etc. return a FUNCTION? if...then...else could!)
