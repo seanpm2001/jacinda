@@ -503,7 +503,7 @@ fn path(x) :=
 path&quot;$0</code></pre>
 <h3 id="define-values-on-the-command-line">Define Values on the
 Command-Line</h3>
-<p>Jacinda is powerful enough that we can jerry-rig a <a
+<p>We can jerry-rig a <a
 href="https://en.wikipedia.org/wiki/RIS_(file_format)">RIS</a> to <a
 href="https://en.wikipedia.org/wiki/BibTeX#Database_files">.bib</a>
 converter:</p>
@@ -547,16 +547,18 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href=
 <p>We can define <code>prettyMem</code> as a library function, viz.</p>
 <pre><code>fn prettyMem(x) :=
   ?x&gt;=1073741824.0
-  ;sprintf&#39;%f GB&#39; (x%1073741824.0)
+  ;sprintf&#39;%f.2 GB&#39; (x%1073741824.0)
   ;?x&gt;=1048576.0
-   ;sprintf&#39;%f MB&#39; (x%1048576.0)
+   ;sprintf&#39;%f.2 MB&#39; (x%1048576.0)
    ;?x&gt;=1024.0
-    ;sprintf&#39;%f kB&#39; (x%1024.0)
-    ;sprintf&#39;%f b&#39; x;</code></pre>
+    ;sprintf&#39;%f.2 kB&#39; (x%1024.0)
+    ;sprintf&#39;%f.0 b&#39; x;</code></pre>
+<p>The <code>%f.2</code> format specifier limits output to two digits
+after the decimal point.</p>
 <p>Then:</p>
 <div class="sourceCode" id="cb39"><pre
 class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="kw">|</span> <span class="ex">ja</span> <span class="st">&quot;@include&#39;lib/prefixSizes.jac&#39; prettyMem((+)|0.0 {ix&gt;1}{</span><span class="dt">\`</span><span class="st">5:})&quot;</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="ex">77.892</span> kB</span></code></pre></div>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="ex">77.89</span> kB</span></code></pre></div>
 <h2 id="vim-tags">Vim Tags</h2>
 <p>Suppose we wish to generate vim tag files for our Jacinda programs.
 According to <code>:help tags-file-format</code> the desired format
