@@ -138,6 +138,7 @@ vanessa@Vanessas-Air jacinda % seq 1000001 | cabal run ja -- run test/examples/e
 - [ ] https://github.com/pharmbio/ptp-project/blob/master/exp/20180426-wo-drugbank/wo_drugbank_wf.go
 - [ ] https://github.com/epogrebnyak/justpath
 - [ ] https://github.com/socialfoundations/folktables
+- [ ] https://ssoready.com/blog/engineering/truths-programmers-timezones/
 - [ ] https://catonmat.net/blog/wp-content/uploads/2008/09/awk1line.txt
 - [ ] http://www.awklang.org/action/?nvgexp&child
 - [ ] https://stackoverflow.com/q/2957684
