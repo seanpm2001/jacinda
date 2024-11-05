@@ -34,6 +34,18 @@ ja --csv "{ix=1}{sprintf'CREATE TABLE c (%s);'([x+', '+y]|>[sprintf '%s TEXT' x]
 CREATE TABLE c (Series_reference TEXT, Period TEXT, Data_value TEXT, STATUS TEXT, UNITS TEXT);
 ```
 
+# Deduplicate Dependencies
+
+```
+cdeps pyc/apple.c | ja "[x+' '+y]|> ~.{|subs /[^\/]+\/\.\.\// '' \`0}"
+```
+
+This is not entirely rigorous since [`dir1/dir2/../file` is not always `dir1/../file`](http://neilmitchell.blogspot.com/2015/10/filepaths-are-subtle-symlinks-are-hard.html).
+
+```
+cdeps pyc/apple.c | xargs realpath | ja "[x+' '+y]|> ~.\$0"
+```
+
 # Extract [Fixity Declarations for HLint](https://github.com/ndmitchell/hlint?tab=readme-ov-file#why-doesnt-hlint-know-the-fixity-for-my-custom--operator)
 
 ```
