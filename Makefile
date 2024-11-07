@@ -96,8 +96,11 @@ bin/powerpc64le-linux-ja: $(HS_SRC)
 	    cp $$BIN $@ ; \
 	    powerpc64le-linux-gnu-strip $@
 
-tags: $(JAC_SRC)
-	fd '.jac$$' prelude lib -x ja run examples/tags.jac -i > $@
+tags: $(JAC_SRC) $(HS_SRC)
+	rm -f tags
+	ghc-tags --ctags
+	fd '.jac$$' prelude lib -x ja run examples/tags.jac -i >> $@
+	ctags --append=yes --languages=ALEX,HAPPY -R src
 
 bench: bench/data/lines.txt bench/data/span.txt bench/data/ulysses.txt
 
