@@ -4,7 +4,6 @@ module Main (main) where
 
 import           A                   (Mode (..))
 import           Control.Applicative ((<|>))
-import System.Directory (doesDirectoryExist)
 import qualified Data.Text           as T
 import qualified Data.Text.IO        as TIO
 import qualified Data.Version        as V
@@ -13,6 +12,7 @@ import           Options.Applicative (HasCompleter, Mod, Parser, argument, bashC
                                       infoOption, long, many, metavar, option, optional, progDesc, short, str, strOption, switch)
 import           Parser              (Value)
 import qualified Paths_jacinda       as P
+import           System.Directory    (doesDirectoryExist)
 
 data Cmd = TC !FilePath ![FilePath]
          | Run !FilePath !(Maybe T.Text) !(Maybe T.Text) !(Maybe FilePath) ![FilePath] ![(T.Text, Value)]

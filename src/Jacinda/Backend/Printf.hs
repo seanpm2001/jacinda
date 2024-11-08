@@ -47,13 +47,13 @@ sp :: T.Text -> [E a] -> T.Text
 sp t [] = t
 sp t (e:es) =
     case (next t, e) of
-        ((_, Nothing), _)                               -> error "Argument to sprintf has more values than expected by format string."
+        ((_, Nothing), _)                             -> error "Argument to sprintf has more values than expected by format string."
         ((p, Just (D Nothing, fmt)), Lit _ (FLit f))  -> p <> pf f <> sp fmt es
         ((p, Just (D (Just n), fmt)), Lit _ (FLit f)) -> p <> pd n f <> sp fmt es
-        ((p, Just (B, fmt)), Lit _ (BLit b))            -> p <> showBool b <> sp fmt es
-        ((p, Just (I, fmt)), Lit _ (ILit i))            -> p <> T.pack (show i) <> sp fmt es
-        ((p, Just (S, fmt)), Lit _ (StrLit bs))         -> p <> decodeUtf8 bs <> sp fmt es
-        ((_, Just{}), _)                                -> error "Argument type does not match sprintf format string."
+        ((p, Just (B, fmt)), Lit _ (BLit b))          -> p <> showBool b <> sp fmt es
+        ((p, Just (I, fmt)), Lit _ (ILit i))          -> p <> T.pack (show i) <> sp fmt es
+        ((p, Just (S, fmt)), Lit _ (StrLit bs))       -> p <> decodeUtf8 bs <> sp fmt es
+        ((_, Just{}), _)                              -> error "Argument type does not match sprintf format string."
 
   where
     showBool True = "#t"; showBool False = "#f"

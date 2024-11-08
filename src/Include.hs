@@ -7,7 +7,7 @@ import           Control.Monad      (filterM)
 import           Data.List.Split    (splitWhen)
 import           Data.Maybe         (listToMaybe)
 import           Paths_jacinda      (getDataDir)
-import           System.Directory   (doesFileExist, getCurrentDirectory,doesDirectoryExist)
+import           System.Directory   (doesDirectoryExist, doesFileExist, getCurrentDirectory)
 import           System.Environment (lookupEnv)
 import           System.FilePath    ((</>))
 
