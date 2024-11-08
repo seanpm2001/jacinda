@@ -586,7 +586,7 @@ processStr&quot;{%/fn +[[:lower:]][[:latin:]]*.*:=/}{`0}</code></pre>
 <p>Note the builtin <code>split</code>; according to the manpages it has
 type</p>
 <pre><code>split : Str -&gt; Regex -&gt; List Str</code></pre>
-<p><code>.2</code> is the syntax for accessing a list -
+<p><code>.2</code> is the syntax for accessing a list;
 <code>line.2</code> extracts the second element.</p>
 <h2 id="error-span">Error Span</h2>
 <p>Suppose we wish to extract span information from compiler output for
@@ -723,7 +723,7 @@ href="https://github.com/nychealth/coronavirus-data/blob/master/latest/now-weekl
 breakthroughs</a>.</p>
 <p>We can download it:</p>
 <pre><code>curl -L https://raw.githubusercontent.com/nychealth/coronavirus-data/master/latest/now-weekly-breakthrough.csv -o /tmp/now-weekly-breakthrough.csv</code></pre>
-<p>And then process its columns with <code>ja</code> using CSV mode:</p>
+<p>And then process its columns using CSV mode:</p>
 <pre><code>ja --csv &#39;,[1.0-x%y] {ix&gt;1}{`5:} {ix&gt;1}{`11:}&#39; -i /tmp/now-weekly-breakthrough.csv</code></pre>
 <p>As of writing:</p>
 <pre><code>0.8793436293436293
@@ -742,15 +742,25 @@ breakthroughs</a>.</p>
 computes effectiveness.</p>
 <h4 id="inflation">Inflation</h4>
 <p>We start with New Zealand’s food price index:</p>
-<pre><code>curl -O https://www.stats.govt.nz/assets/Uploads/Food-price-index/Food-price-index-September-2023/Download-data/food-price-index-september-2023-weighted-average-prices.csv</code></pre>
+<pre><code>curl https://www.stats.govt.nz/assets/Uploads/Food-price-index/Food-price-index-September-2023/Download-data/food-price-index-september-2023-weighted-average-prices.csv -o nz-food-prices.csv</code></pre>
 <p>Then:</p>
-<pre><code>ja --csv &#39;(%)\. {%/Apple/}{`3:}&#39;</code></pre>
+<pre><code>ja --csv &#39;(%)\. {%/Apple/}{`3:}&#39; -i nz-food-prices.csv
+
+1.0634920634920635
+1.0696517412935325
+1.0511627906976744
+1.1637168141592922
+1.0608365019011408
+1.17921146953405
+1.182370820668693
+0.7326478149100257
+⋮</code></pre>
 <h1 id="machinery">Machinery</h1>
 <h2 id="typeclasses">Typeclasses</h2>
-<p>Under the hood, Jacinda has typeclasses, inspired by Haskell. These
+<p>Under the hood, Jacinda has typeclasses, inspired by Haskell. They
 are used to disambiguate operators and witness with an
 implementation.</p>
-<p>The language does not allow custom typeclasses.</p>
+<p>User-defined typeclasses are not allowed.</p>
 <h3 id="functor">Functor</h3>
 <p>The map operator <code>"</code> works on all functors, not just
 streams. <code>Stream</code>, <code>List</code>, and <code>Option</code>
