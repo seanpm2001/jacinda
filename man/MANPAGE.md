@@ -186,6 +186,10 @@ Regular expressions follow Rust's regex library: https://docs.rs/regex/
 
 ## SYNTAX
 
+**\'str\'** string literal
+
+**/pat/** regex literal
+
 **`n** nth field
 
 **`0** current line
