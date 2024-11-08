@@ -687,7 +687,7 @@ We can download it:
 curl -L https://raw.githubusercontent.com/nychealth/coronavirus-data/master/latest/now-weekly-breakthrough.csv -o /tmp/now-weekly-breakthrough.csv
 ```
 
-And then process its columns with `ja` using CSV mode:
+And then process its columns using CSV mode:
 
 ```
 ja --csv ',[1.0-x%y] {ix>1}{`5:} {ix>1}{`11:}' -i /tmp/now-weekly-breakthrough.csv
@@ -741,10 +741,10 @@ ja --csv '(%)\. {%/Apple/}{`3:}' -i nz-food-prices.csv
 
 ## Typeclasses
 
-Under the hood, Jacinda has typeclasses, inspired by Haskell. These are used to
+Under the hood, Jacinda has typeclasses, inspired by Haskell. They are used to
 disambiguate operators and witness with an implementation.
 
-The language does not allow custom typeclasses.
+User-defined typeclasses are not allowed.
 
 ### Functor
 
