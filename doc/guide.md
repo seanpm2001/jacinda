@@ -718,13 +718,23 @@ effectiveness.
 We start with New Zealand's food price index:
 
 ```
-curl -O https://www.stats.govt.nz/assets/Uploads/Food-price-index/Food-price-index-September-2023/Download-data/food-price-index-september-2023-weighted-average-prices.csv
+curl https://www.stats.govt.nz/assets/Uploads/Food-price-index/Food-price-index-September-2023/Download-data/food-price-index-september-2023-weighted-average-prices.csv -o nz-food-prices.csv
 ```
 
 Then:
 
 ```
-ja --csv '(%)\. {%/Apple/}{`3:}'
+ja --csv '(%)\. {%/Apple/}{`3:}' -i nz-food-prices.csv
+
+1.0634920634920635
+1.0696517412935325
+1.0511627906976744
+1.1637168141592922
+1.0608365019011408
+1.17921146953405
+1.182370820668693
+0.7326478149100257
+⋮
 ```
 
 # Machinery
