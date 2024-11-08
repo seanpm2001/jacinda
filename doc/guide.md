@@ -457,7 +457,7 @@ Note the builtin `split`; according to the manpages it has type
 split : Str -> Regex -> List Str
 ```
 
-`.2` is the syntax for accessing a list - `line.2` extracts the second element.
+`.2` is the syntax for accessing a list; `line.2` extracts the second element.
 
 ## Error Span
 
