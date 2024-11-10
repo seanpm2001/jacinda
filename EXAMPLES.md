@@ -335,3 +335,18 @@ C_SRC := $(shell for d in $$(ja run cdeps.jac -i src/main.c); do realpath $$d; d
 
 src/main.c: $(C_SRC)
 ```
+
+# Get Package Directories (Python)
+
+```zsh
+% python3 -m site | ja ".?{|\`1 ~* 1 /([^']*site-packages)/}"
+/Users/vanessa/Library/Python/3.13/lib/python/site-packages
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages
+```
+
+We could use this to pass flags to a C compiler like so:
+
+```
+% python3 -m site | ja "[x+' '+y]|>(sprintf'-L%s')¨.?{|\`1 ~* 1 /([^']*site-packages)/}"
+-L/Users/vanessa/Library/Python/3.13/lib/python/site-packages -L/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages
+```
