@@ -7,8 +7,8 @@
   - [x] fold: catmaybes, mapMaybes
 # Documentation
 - [ ] Document escaped characters
-- [ ] tuples
-- [ ] Document `%i`, `%s` in manpages
+- [x] tuples
+- [x] Document `%i`, `%s` in manpages
 # Unicode
 - [x] `reintercalate` builtin
 - [x] ∅ for monoidal identity
