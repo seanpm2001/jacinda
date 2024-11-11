@@ -123,6 +123,7 @@ import Prettyprinter (Pretty (pretty), (<+>), concatWith, squotes)
     val { TokKeyword $$ KwVal }
     end { TokKeyword $$ KwEnd }
     set { TokKeyword $$ KwSet }
+    block { TokKeyword $$ KwBlock }
     flush { TokKeyword $$ KwFlush }
     fn { TokKeyword $$ KwFn }
     include { TokKeyword $$ KwInclude }
@@ -246,6 +247,7 @@ Args :: { [(Nm AlexPosn)] }
 D :: { D AlexPosn }
   : set fs defEq rr semicolon { SetFS (rr $4) }
   | set rs defEq rr semicolon { SetRS (rr $4) }
+  | block rr semicolon { SetBlock (rr $2) }
   | set ofs defEq strLit semicolon { SetOFS (strTok $4) }
   | set ors defEq strLit semicolon { SetORS (strTok $4) }
   | set asv semicolon { SetAsv }
