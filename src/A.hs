@@ -1,7 +1,5 @@
 {-# LANGUAGE DeriveAnyClass    #-}
-{-# LANGUAGE DeriveFunctor     #-}
 {-# LANGUAGE DeriveGeneric     #-}
-{-# LANGUAGE OverloadedStrings #-}
 
 module A ( E (..), T (..), (~>), TB (..), C (..)
          , L (..), N (..), BBin (..), BTer (..)

@@ -1,6 +1,4 @@
 {
-    {-# LANGUAGE DeriveFunctor     #-}
-    {-# LANGUAGE OverloadedStrings #-}
     module L ( alexMonadScan
              , alexInitUserState
              , runAlexSt

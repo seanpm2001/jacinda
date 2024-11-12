@@ -1,6 +1,3 @@
-{-# LANGUAGE DeriveFunctor     #-}
-{-# LANGUAGE OverloadedStrings #-}
-
 module Ty ( Subst
           , runTyM, tyP
           , match, aT

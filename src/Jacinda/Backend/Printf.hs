@@ -1,7 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
-
-module Jacinda.Backend.Printf ( sprintf
-                              ) where
+module Jacinda.Backend.Printf ( sprintf ) where
 
 import           A
 import qualified Data.ByteString                   as BS

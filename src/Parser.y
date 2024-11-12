@@ -1,6 +1,4 @@
 {
-    {-# LANGUAGE DeriveFunctor     #-}
-    {-# LANGUAGE OverloadedStrings #-}
     module Parser ( parse
                   , parseWithMax
                   , parseWithCtx

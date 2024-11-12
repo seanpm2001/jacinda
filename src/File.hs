@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module File ( tcIO, tySrc
             , runStdin, runOnFile
             , exprEval

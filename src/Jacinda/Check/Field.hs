@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Jacinda.Check.Field ( cF, LErr (..) ) where
 
 import           A

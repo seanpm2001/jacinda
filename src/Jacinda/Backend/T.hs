@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Jacinda.Backend.T ( LineCtx, run, eB ) where
 
 import           A

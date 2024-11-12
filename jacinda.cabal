@@ -97,9 +97,11 @@ library jacinda-lib
         deepseq,
         lazy-csv
 
-    other-extensions:
+    default-extensions:
         DeriveFunctor
         OverloadedStrings
+
+    other-extensions:
         DeriveAnyClass
         DeriveGeneric
         DeriveFoldable

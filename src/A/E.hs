@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module A.E ( M, nN, eta ) where
 
 import           A

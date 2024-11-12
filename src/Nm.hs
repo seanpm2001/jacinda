@@ -1,5 +1,3 @@
-{-# LANGUAGE DeriveFunctor #-}
-
 module Nm ( Nm (..), TyName
           , eqName
           ) where

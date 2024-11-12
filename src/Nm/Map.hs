@@ -1,5 +1,4 @@
 {-# LANGUAGE DeriveFoldable    #-}
-{-# LANGUAGE DeriveFunctor     #-}
 {-# LANGUAGE DeriveTraversable #-}
 
 module Nm.Map ( NmMap (..)

@@ -1,5 +1,4 @@
 {-# LANGUAGE OverloadedLists   #-}
-{-# LANGUAGE OverloadedStrings #-}
 
 module Jacinda.Regex ( lazySplit
                      , splitBy
