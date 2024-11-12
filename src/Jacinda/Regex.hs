@@ -3,6 +3,7 @@
 
 module Jacinda.Regex ( lazySplit
                      , splitBy
+                     , splitBegin
                      , defaultRurePtr
                      , isMatch'
                      , find'
@@ -95,19 +96,28 @@ unsnoc = foldr (\x acc -> Just $ case acc of {Nothing -> ([], x); Just ~(a, b) -
 splitBy :: RurePtr -> BS.ByteString -> V.Vector BS.ByteString
 splitBy = (V.fromList .) . splitByA
 
-{-# NOINLINE splitBy #-}
+{-# NOINLINE splitByA #-}
 splitByA :: RurePtr
          -> BS.ByteString
          -> [BS.ByteString]
-splitByA _ "" = mempty
+splitByA _ "" = []
 splitByA re haystack@(BS.BS fp l) =
-    [BS.BS (fp `plusForeignPtr` s) (e-s) | (s, e) <- slicePairs]
+    [BS.BS (fp `plusForeignPtr` s) (e-s) | (s,e) <- slicePairs]
     where ixes = unsafeDupablePerformIO $ matches' re haystack
           slicePairs = case ixes of
                 (RureMatch 0 i:rms) -> mkMiddle (fromIntegral i) rms
                 rms                 -> mkMiddle 0 rms
           mkMiddle begin' []        = [(begin', l)]
           mkMiddle begin' (rm0:rms) = (begin', fromIntegral (start rm0)) : mkMiddle (fromIntegral $ end rm0) rms
+
+{-# NOINLINE splitBegin #-}
+splitBegin :: RurePtr -> BS.ByteString -> [BS.ByteString]
+splitBegin _ "" = []
+splitBegin re haystack@(BS.BS fp l) =
+    [BS.BS (fp `plusForeignPtr` s) (e-s) | (s,e) <- chopAt 0 ixes]
+    where ixes = unsafeDupablePerformIO $ matches' re haystack
+          chopAt begin [] = [(begin, l)]
+          chopAt begin (RureMatch b _:rms) = (begin, fromIntegral b) : chopAt (fromIntegral b) rms
 
 isMatch' :: RurePtr
          -> BS.ByteString
