@@ -1,8 +1,9 @@
-{-# LANGUAGE OverloadedLists   #-}
+{-# LANGUAGE OverloadedLists #-}
 
 module Jacinda.Regex ( lazySplit
+                     , lazySplitH
                      , splitBy
-                     , splitBegin
+                     , splitH
                      , defaultRurePtr
                      , isMatch'
                      , find'
@@ -76,18 +77,31 @@ sub1 re bs ss =
 find' :: RurePtr -> BS.ByteString -> Maybe RureMatch
 find' re str = unsafeDupablePerformIO $ find re str 0
 
+lazySplitH :: RurePtr -> BSL.ByteString -> [BS.ByteString]
+lazySplitH rp = go Nothing . BSL.toChunks where
+    go Nothing [] = []
+    go Nothing (c:cs) =
+        case unsnoc (splitH rp c) of
+            Just (iss,lss) -> iss++go (Just lss) cs
+            Nothing        -> go Nothing cs
+    go (Just c) [] = splitByA rp c
+    go (Just e) (c:cs) =
+        case unsnoc (splitByA rp (e<>c)) of
+            Just (iss,lss) -> iss++go (Just lss) cs
+            Nothing        -> go Nothing cs
+
 lazySplit :: RurePtr -> BSL.ByteString -> [BS.ByteString]
-lazySplit rp bs = let c=BSL.toChunks bs in go Nothing c
-        where go Nothing []      = []
-              go Nothing (c:cs)  = let ss=splitByA rp c
-                    in case unsnoc ss of
-                        Just (iss,lss) -> iss++go (Just lss) cs
-                        Nothing        -> go Nothing cs
-              go (Just c) []     = let ss=splitByA rp c in ss
-              go (Just e) (c:cs) = let ss=splitByA rp (e<>c)
-                    in case unsnoc ss of
-                        Just (iss,lss) -> iss++go (Just lss) cs
-                        Nothing        -> go Nothing cs
+lazySplit rp = go Nothing . BSL.toChunks where
+    go Nothing []      = []
+    go Nothing (c:cs)  =
+        case unsnoc (splitByA rp c) of
+            Just (iss,lss) -> iss++go (Just lss) cs
+            Nothing        -> go Nothing cs
+    go (Just c) []     = splitByA rp c
+    go (Just e) (c:cs) =
+        case unsnoc (splitByA rp (e<>c)) of
+            Just (iss,lss) -> iss++go (Just lss) cs
+            Nothing        -> go Nothing cs
 
 unsnoc :: [a] -> Maybe ([a], a)
 unsnoc = foldr (\x acc -> Just $ case acc of {Nothing -> ([], x); Just ~(a, b) -> (x:a, b)}) Nothing
@@ -109,13 +123,13 @@ splitByA re haystack@(BS.BS fp l) =
           mkMiddle begin' []        = [(begin', l)]
           mkMiddle begin' (rm0:rms) = (begin', fromIntegral (start rm0)) : mkMiddle (fromIntegral $ end rm0) rms
 
-{-# NOINLINE splitBegin #-}
-splitBegin :: RurePtr -> BS.ByteString -> [BS.ByteString]
-splitBegin _ "" = []
-splitBegin re haystack@(BS.BS fp l) =
+{-# NOINLINE splitH #-}
+splitH :: RurePtr -> BS.ByteString -> [BS.ByteString]
+splitH _ "" = []
+splitH re haystack@(BS.BS fp l) =
     [BS.BS (fp `plusForeignPtr` s) (e-s) | (s,e) <- chopAt 0 ixes]
     where ixes = unsafeDupablePerformIO $ matches' re haystack
-          chopAt begin [] = [(begin, l)]
+          chopAt begin []                  = [(begin, l)]
           chopAt begin (RureMatch b _:rms) = (begin, fromIntegral b) : chopAt (fromIntegral b) rms
 
 isMatch' :: RurePtr
