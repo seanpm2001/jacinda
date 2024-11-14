@@ -221,7 +221,7 @@ ts = foldl' (@.) (\_ -> id)
 κ FieldList{} ~(_, bs, _) = vS bs
 κ (EApp ty e0 e1) line    = EApp ty (e0 `κ` line) (e1 `κ` line)
 κ (NB _ Ix) ~(_, _, fp)   = mkI fp
-κ (NB _ Nf) ~(_, bs, _)   = mkI$fromIntegral (length bs)
+κ (NB _ Nf) ~(_, bs, _)   = mkI$!fromIntegral (length bs)
 κ e@BB{} _                = e
 κ e@UB{} _                = e
 κ e@TB{} _                = e
@@ -554,16 +554,14 @@ ms (Nm _ (U i) _) = IM.singleton i
 
 wCM :: Tmp -> Tmp -> Σ -> Σ
 wCM src tgt (Σ u env d di df b) =
-    let xϵ=env!src
-    in Σ u (case xϵ of
+    Σ u (case env!src of
         Just y  -> case asM y of {Nothing -> tgt\~env; Just yϵ -> env&tgt~!yϵ}
         Nothing -> tgt\~env) d di df b
 
 {-# SCC wMM #-}
 wMM :: E T -> Tmp -> Tmp -> Σ -> Σ
 wMM (Lam _ n e) src tgt (Σ j env d di df b) =
-    let xϵ=env!src
-    in case xϵ of
+    case env!src of
         Just x ->
             let be=ms n x; (y,k)=e@!(j,be)
             in Σ k (case asM y of
@@ -574,8 +572,7 @@ wMM e _ _ _ = throw$InternalArityOrEta 1 e
 
 wZ :: E T -> Tmp -> Tmp -> Tmp -> Σ -> Σ
 wZ (Lam _ n0 (Lam _ n1 e)) src0 src1 tgt (Σ j env d di df b) =
-    let x0ϵ=env!src0; x1ϵ=env!src1
-    in (case (x0ϵ, x1ϵ) of
+    (case (env!src0, env!src1) of
         (Just x, Just y) ->
             let be=me [(n0, x), (n1, y)]; (z,k)=e@!(j,be)
             in Σ k (env&tgt~!z)
@@ -584,8 +581,7 @@ wZ e _ _ _ _ = throw$InternalArityOrEta 2 e
 
 wM :: E T -> Tmp -> Tmp -> Σ -> Σ
 wM (Lam _ n e) src tgt (Σ j env d di df b) =
-    let xϵ=env!src
-    in case xϵ of
+    case env!src of
         Just x ->
             let be=ms n x; (y,k)=e@!(j,be)
             in Σ k (env&tgt~!y) d di df b
@@ -605,8 +601,7 @@ wG (p, e) tgt line (Σ j env d di df b) =
 
 wDOp :: E T -> Int -> Tmp -> Tmp -> Σ -> Σ
 wDOp (Lam (TyArr _ (TyB TyStr)) n e) key src tgt (Σ i env d di df b) =
-    let x=env!src
-    in case x of
+    case env!src of
         Nothing -> Σ i (tgt\~env) d di df b
         Just xϵ ->
             case IM.lookup key d of
@@ -616,8 +611,7 @@ wDOp (Lam (TyArr _ (TyB TyStr)) n e) key src tgt (Σ i env d di df b) =
                 (y,k)=e@!(i,be); be=ms n xϵ
                 e'=asS y
 wDOp (Lam (TyArr _ (TyB TyI)) n e) key src tgt (Σ i env d di df b) =
-    let x=env!src
-    in case x of
+    case env!src of
         Nothing -> Σ i (tgt\~env) d di df b
         Just xϵ ->
             case IM.lookup key di of
@@ -631,8 +625,7 @@ wDOp (Lam (TyArr _ (TyB TyI)) n e) key src tgt (Σ i env d di df b) =
                 go Nothing  = Just$!IS.singleton e'
                 go (Just s) = Just$!IS.insert e' s
 wDOp (Lam (TyArr _ (TyB TyFloat)) n e) key src tgt (Σ i env d di df b) =
-    let x=env!src
-    in case x of
+    case env!src of
         Nothing -> Σ i (tgt\~env) d di df b
         Just xϵ ->
             case IM.lookup key df of
@@ -650,8 +643,7 @@ wDOp e _ _ _ _ = throw $ InternalArityOrEta 1 e
 
 wB :: (E T, E T) -> Int -> Tmp -> Tmp -> Σ -> Σ
 wB (e0, e1) key src tgt (Σ i env d di df b) =
-    let x=env!src
-    in case x of
+    case env!src of
         Nothing -> Σ i (tgt\~env) d di df b
         Just xϵ -> let xS=asS xϵ in if key `IS.member` b
             then if isMatch' r1 xS then Σ i (env&tgt~!xϵ) d di df (IS.delete key b) else Σ i (env&tgt~!xϵ) d di df b
@@ -662,8 +654,7 @@ wB (e0, e1) key src tgt (Σ i env d di df b) =
 {-# SCC wD #-}
 wD :: TB -> Int -> Tmp -> Tmp -> Σ -> Σ
 wD TyStr key src tgt (Σ i env d di df b) =
-    let x=env!src
-    in case x of
+    case env!src of
         Nothing -> Σ i (tgt\~env) d di df b
         Just e ->
             case IM.lookup key d of
@@ -672,8 +663,7 @@ wD TyStr key src tgt (Σ i env d di df b) =
               where
                 e'=asS e
 wD TyI key src tgt (Σ i env d di df b) =
-    let x=env!src
-    in case x of
+    case env!src of
         Nothing -> Σ i (tgt\~env) d di df b
         Just e ->
             case IM.lookup key di of
@@ -685,8 +675,7 @@ wD TyI key src tgt (Σ i env d di df b) =
                 go Nothing  = Just$!IS.singleton e'
                 go (Just s) = Just$!IS.insert e' s
 wD TyFloat key src tgt (Σ i env d di df b) =
-    let x=env!src
-    in case x of
+    case env!src of
         Nothing -> Σ i (tgt\~env) d di df b
         Just e ->
             case IM.lookup key df of
@@ -698,8 +687,7 @@ wD TyFloat key src tgt (Σ i env d di df b) =
 
 wP :: E T -> Tmp -> Tmp -> Σ -> Σ
 wP (Lam _ n e) src tgt (Σ j env d di df b) =
-    let xϵ=env!src
-    in case xϵ of
+    case env!src of
         Just x ->
             let be=ms n x; (p,k)=e@!(j,be)
             in Σ k (IM.insert tgt (if asB p then Just$!x else Nothing) env) d di df b
@@ -708,8 +696,7 @@ wP e _ _ _ = throw $ InternalArityOrEta 1 e
 
 wΠ :: E T -> Tmp -> Tmp -> Tmp -> Σ -> Σ
 wΠ (Lam _ nn (Lam _ nprev e)) pt src tgt (Σ j env d di df b) =
-    let prevϵ=env!pt; xϵ=env!src
-    in (case (prevϵ, xϵ) of
+    (case (env!pt, env!src) of
         (Just prev, Just x) ->
             let be=me [(nprev, prev), (nn, x)]
                 (res,u)=e@!(j,be)
@@ -722,8 +709,7 @@ wΠ e _ _ _ _ = throw $ InternalArityOrEta 2 e
 {-# SCC wF #-}
 wF :: E T -> Tmp -> Tmp -> Σ -> Σ
 wF (Lam _ nacc (Lam _ nn e)) src tgt (Σ j env d di df b) =
-    let accϵ = env!tgt; xϵ = env!src
-    in (case (accϵ, xϵ) of
+    (case (env!tgt, env!src) of
         (Just acc, Just x) ->
             let be=me [(nacc, acc), (nn, x)]
                 (res, u)=e@!(j, be)
