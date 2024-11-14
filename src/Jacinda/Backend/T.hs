@@ -273,7 +273,7 @@ ctx (EApp _ (UB _ CatMaybes) xs) o                       = do {t <- nI; (env, sb
 ctx (EApp _ (EApp _ (BB _ Filter) p) xs) o               = do {t <- nI; (env, sb) <- ctx xs t; pure (na o env, \l->wP p t o.sb l)}
 ctx (Guarded _ p e) o                                    = pure (ni o, wG (p, e) o)
 ctx (Implicit _ e) o                                     = pure (ni o, wI e o)
-ctx (EApp _ (EApp _ (EApp _ (TB _ Scan) op) seed) xs) o  = do {t <- nI; (env, sb) <- ctx xs t; seed' <- seed@>mempty; pure (o~!seed'$env, \l->wF op t o.sb l)}
+ctx (EApp _ (EApp _ (EApp _ (TB _ Scan) op) seed) xs) o  = do {t <- nI; (env, sb) <- ctx xs t; seed' <- seed@>mempty; pure (env&o~!seed', \l->wF op t o.sb l)}
 ctx (EApp _ (EApp _ (EApp _ (TB _ ZipW) op) xs) ys) o    = do {t0 <- nI; t1 <- nI; (env0, sb0) <- ctx xs t0; (env1, sb1) <- ctx ys t1; pure (na o (env0<>env1), \l->wZ op t0 t1 o.sb0 l.sb1 l)}
 ctx (EApp _ (EApp _ (BB _ Prior) op) xs) o               = do {t <- nI; (env, sb) <- ctx xs t; pt <- nI; pure (na o (pt\~env), \l -> wΠ op pt t o.sb l)}
 ctx (EApp (_:$TyB ty) (UB _ Dedup) xs) o                 = do {k <- nI; t <- nI; (env, sb) <- ctx xs t; pure (na o env, \l->wD ty k t o.sb l)}
@@ -556,7 +556,7 @@ wCM :: Tmp -> Tmp -> Σ -> Σ
 wCM src tgt (Σ u env d di df b) =
     let xϵ=env!src
     in Σ u (case xϵ of
-        Just y  -> case asM y of {Nothing -> tgt\~env; Just yϵ -> tgt~!yϵ$env}
+        Just y  -> case asM y of {Nothing -> tgt\~env; Just yϵ -> env&tgt~!yϵ}
         Nothing -> tgt\~env) d di df b
 
 {-# SCC wMM #-}
@@ -567,7 +567,7 @@ wMM (Lam _ n e) src tgt (Σ j env d di df b) =
         Just x ->
             let be=ms n x; (y,k)=e@!(j,be)
             in Σ k (case asM y of
-                Just yϵ -> tgt~!yϵ$env
+                Just yϵ -> env&tgt~!yϵ
                 Nothing -> tgt\~env) d di df b
         Nothing -> Σ j (tgt\~env) d di df b
 wMM e _ _ _ = throw$InternalArityOrEta 1 e
@@ -578,7 +578,7 @@ wZ (Lam _ n0 (Lam _ n1 e)) src0 src1 tgt (Σ j env d di df b) =
     in (case (x0ϵ, x1ϵ) of
         (Just x, Just y) ->
             let be=me [(n0, x), (n1, y)]; (z,k)=e@!(j,be)
-            in Σ k (tgt~!z$env)
+            in Σ k (env&tgt~!z)
         (Nothing, Nothing) -> Σ j (tgt\~env)) d di df b
 wZ e _ _ _ _ = throw$InternalArityOrEta 2 e
 
@@ -588,19 +588,19 @@ wM (Lam _ n e) src tgt (Σ j env d di df b) =
     in case xϵ of
         Just x ->
             let be=ms n x; (y,k)=e@!(j,be)
-            in Σ k (tgt~!y$env) d di df b
+            in Σ k (env&tgt~!y) d di df b
         Nothing -> Σ j (tgt\~env) d di df b
 wM e _ _ _ = throw$InternalArityOrEta 1 e
 
 wI :: E T -> Tmp -> LineCtx -> Σ -> Σ
 wI e tgt line (Σ j env d di df b) =
-    let e'=e `κ` line; (e'',k)=e'$@j in Σ k (tgt~!e''$env) d di df b
+    let e'=e `κ` line; (e'',k)=e'$@j in Σ k (env&tgt~!e'') d di df b
 
 wG :: (E T, E T) -> Tmp -> LineCtx -> Σ -> Σ
 wG (p, e) tgt line (Σ j env d di df b) =
     let p'=p `κ` line; (p'',k)=p'$@j
     in (if asB p''
-        then let e'=e `κ` line; (e'',u) =e'$@k in Σ u (tgt~!e''$env)
+        then let e'=e `κ` line; (e'',u) =e'$@k in Σ u (env&tgt~!e'')
         else Σ k (tgt\~env)) d di df b
 
 wDOp :: E T -> Int -> Tmp -> Tmp -> Σ -> Σ
@@ -610,8 +610,8 @@ wDOp (Lam (TyArr _ (TyB TyStr)) n e) key src tgt (Σ i env d di df b) =
         Nothing -> Σ i (tgt\~env) d di df b
         Just xϵ ->
             case IM.lookup key d of
-                Nothing -> Σ k (tgt~!y$env) (IM.insert key (S.singleton e') d) di df b
-                Just ss -> (if e' `S.member` ss then Σ k (tgt\~env) d else Σ k (tgt~!y$env) (key!:e'$d)) di df b
+                Nothing -> Σ k (env&tgt~!y) (IM.insert key (S.singleton e') d) di df b
+                Just ss -> (if e' `S.member` ss then Σ k (tgt\~env) d else Σ k (env&tgt~!y) (key!:e'$d)) di df b
               where
                 (y,k)=e@!(i,be); be=ms n xϵ
                 e'=asS y
@@ -621,8 +621,8 @@ wDOp (Lam (TyArr _ (TyB TyI)) n e) key src tgt (Σ i env d di df b) =
         Nothing -> Σ i (tgt\~env) d di df b
         Just xϵ ->
             case IM.lookup key di of
-                Nothing -> Σ k (tgt~!y$env) d (IM.insert key (IS.singleton e') di) df b
-                Just ds -> (if e' `IS.member` ds then Σ k (tgt\~env) d di else Σ k (tgt~!y$env) d (IM.alter go key di)) df b
+                Nothing -> Σ k (env&tgt~!y) d (IM.insert key (IS.singleton e') di) df b
+                Just ds -> (if e' `IS.member` ds then Σ k (tgt\~env) d di else Σ k (env&tgt~!y) d (IM.alter go key di)) df b
 
               where
                 (y,k)=e@!(i,be); be=ms n xϵ
@@ -636,8 +636,8 @@ wDOp (Lam (TyArr _ (TyB TyFloat)) n e) key src tgt (Σ i env d di df b) =
         Nothing -> Σ i (tgt\~env) d di df b
         Just xϵ ->
             case IM.lookup key df of
-                Nothing -> Σ k (tgt~!y$env) d di (IM.insert key (S.singleton e') df) b
-                Just ds -> if e' `S.member` ds then Σ k (tgt\~env) d di df b else Σ k (tgt~!y$env) d di (key!:e'$df) b
+                Nothing -> Σ k (env&tgt~!y) d di (IM.insert key (S.singleton e') df) b
+                Just ds -> if e' `S.member` ds then Σ k (tgt\~env) d di df b else Σ k (env&tgt~!y) d di (key!:e'$df) b
               where
                 (y,k)=e@!(i,be); be=ms n xϵ
                 e'=asF y
@@ -654,8 +654,8 @@ wB (e0, e1) key src tgt (Σ i env d di df b) =
     in case x of
         Nothing -> Σ i (tgt\~env) d di df b
         Just xϵ -> let xS=asS xϵ in if key `IS.member` b
-            then if isMatch' r1 xS then Σ i (tgt~!xϵ$env) d di df (IS.delete key b) else Σ i (tgt~!xϵ$env) d di df b
-            else if isMatch' r0 xS then Σ i (tgt~!xϵ$env) d di df (IS.insert key b) else Σ i (tgt\~env) d di df b
+            then if isMatch' r1 xS then Σ i (env&tgt~!xϵ) d di df (IS.delete key b) else Σ i (env&tgt~!xϵ) d di df b
+            else if isMatch' r0 xS then Σ i (env&tgt~!xϵ) d di df (IS.insert key b) else Σ i (tgt\~env) d di df b
   where
     r0=asR e0; r1=asR e1
 
@@ -667,8 +667,8 @@ wD TyStr key src tgt (Σ i env d di df b) =
         Nothing -> Σ i (tgt\~env) d di df b
         Just e ->
             case IM.lookup key d of
-                Nothing -> Σ i (tgt~!e$env) (IM.insert key (S.singleton e') d) di df b
-                Just ds -> (if e' `S.member` ds then Σ i (tgt\~env) d else Σ i (tgt~!e$env) (key!:e'$d)) di df b
+                Nothing -> Σ i (env&tgt~!e) (IM.insert key (S.singleton e') d) di df b
+                Just ds -> (if e' `S.member` ds then Σ i (tgt\~env) d else Σ i (env&tgt~!e) (key!:e'$d)) di df b
               where
                 e'=asS e
 wD TyI key src tgt (Σ i env d di df b) =
@@ -677,8 +677,8 @@ wD TyI key src tgt (Σ i env d di df b) =
         Nothing -> Σ i (tgt\~env) d di df b
         Just e ->
             case IM.lookup key di of
-                Nothing -> Σ i (tgt~!e$env) d (IM.insert key (IS.singleton e') di) df b
-                Just ds -> (if e' `IS.member` ds then Σ i (tgt\~env) d di else Σ i (tgt~!e$env) d (IM.alter go key di)) df b
+                Nothing -> Σ i (env&tgt~!e) d (IM.insert key (IS.singleton e') di) df b
+                Just ds -> (if e' `IS.member` ds then Σ i (tgt\~env) d di else Σ i (env&tgt~!e) d (IM.alter go key di)) df b
               where
                 e'=fromIntegral$asI e
 
@@ -690,8 +690,8 @@ wD TyFloat key src tgt (Σ i env d di df b) =
         Nothing -> Σ i (tgt\~env) d di df b
         Just e ->
             case IM.lookup key df of
-                Nothing -> Σ i (tgt~!e$env) d di (IM.insert key (S.singleton e') df) b
-                Just ds -> (if e' `S.member` ds then Σ i (tgt\~env) d di df else Σ i (tgt~!e$env) d di (key!:e'$df)) b
+                Nothing -> Σ i (env&tgt~!e) d di (IM.insert key (S.singleton e') df) b
+                Just ds -> (if e' `S.member` ds then Σ i (tgt\~env) d di df else Σ i (env&tgt~!e) d di (key!:e'$df)) b
               where
                 e'=asF e
 
@@ -727,10 +727,10 @@ wF (Lam _ nacc (Lam _ nn e)) src tgt (Σ j env d di df b) =
         (Just acc, Just x) ->
             let be=me [(nacc, acc), (nn, x)]
                 (res, u)=e@!(j, be)
-            in Σ u (tgt~!res$env)
-        (Just acc, Nothing) -> Σ j (tgt~!acc$env)
+            in Σ u (env&tgt~!res)
+        (Just acc, Nothing) -> Σ j (env&tgt~!acc)
         (Nothing, Nothing) -> Σ j (tgt\~env)
-        (Nothing, Just x) -> Σ j (tgt~!x$env)) d di df b
+        (Nothing, Just x) -> Σ j (env&tgt~!x)) d di df b
 wF e _ _ _ = throw $ InternalArityOrEta 2 e
 
 badctx e = error ("Internal error: κ called on" ++ show e)
