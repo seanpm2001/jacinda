@@ -255,7 +255,7 @@ Print lines longer than 72 bytes
 Select only the third line
 .TP
 :set csv; {ix=1}{[x+\[aq]\[rs]n\[aq]+y]|>\[ga]$}
-Present column names of a .csv file, one per line
+Present column names of a .csv file
 .TP
 (+)|0 $1:i
 Sum first column
@@ -285,7 +285,7 @@ Is the last line blank?
 Trim trailing whitespace
 .TP
 ja \-R\[aq]\[rs]n\[rs]s*\[aq] \[dq][x+\[aq] \[aq]+y]|>\[rs]$0\[dq]
-Concatenate into one line, discarding extra leading whitespace between
+Concatenate into one line, discarding leading whitespace between
 .SH BUGS
 Please report any bugs you may come across to
 https://github.com/vmchale/jacinda/issues

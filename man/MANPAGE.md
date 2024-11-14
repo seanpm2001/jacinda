@@ -263,7 +263,7 @@ a boolean expression.
 :   Select only the third line
 
 :set csv; {ix=1}{[x+\'\\n\'+y]|>`$}
-:   Present column names of a .csv file, one per line
+:   Present column names of a .csv file
 
 (+)|0 $1:i
 :   Sum first column
@@ -293,7 +293,7 @@ a boolean expression.
 :   Trim trailing whitespace
 
 ja -R\'\\n\\s*\' \"[x+\' \'+y]|>\\$0\"
-:   Concatenate into one line, discarding extra leading whitespace
+:   Concatenate into one line, discarding leading whitespace
 between
 
 # BUGS
