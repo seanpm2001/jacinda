@@ -5,7 +5,7 @@ import           A.I
 import           C
 import           Control.Exception                 (Exception, throw)
 import           Control.Monad                     (zipWithM, (<=<))
-import           Control.Monad.Trans.State.Strict  (State, evalState, runState, state)
+import           Control.Monad.Trans.State.Strict  (evalState, runState, state)
 import           Data.Bifunctor                    (first, second)
 import qualified Data.ByteString                   as BS
 import           Data.ByteString.Builder           (hPutBuilder)
@@ -80,12 +80,10 @@ parseAsF = mkF.readFloat
 
 foldSeq x = foldr seq () x `seq` x
 
-type MM = State Int
-
-nI :: MM Int
+nI :: UM Int
 nI = state (\i -> (i, i+1))
 
-nN :: T -> MM (Nm T)
+nN :: T -> UM (Nm T)
 nN t = do {u <- nI; pure (Nm "fold_hole" (U u) t)}
 
 pSF :: Bool -> (Maybe Tmp, [Tmp]) -> [Env] -> IO ()
@@ -97,27 +95,29 @@ pSF flush c@(_, tt) (e:es) = do
     pSF flush c es
 pSF _ _ [] = pure ()
 
+uStream j = flip evalState j
+
 run :: Bool -> Int -> E T -> [LineCtx] -> IO ()
 run _ _ e _ | ty@TyArr{} <- eLoc e = error ("Found function type: " ++ show ty)
-run flush j e ctxs | TyB TyUnit <- eLoc e =  (\(s, f, env) -> pSF flush (s,f) env) $ flip evalState j $ do
+run flush j e ctxs | TyB TyUnit <- eLoc e =  (\(s, f, env) -> pSF flush (s,f) env) $ uStream j $ do
     (res, tt, iEnv, μ) <- unit e
     u <- nI
     let outs=μ<$>ctxs; es'=scanl' (&) (Σ u iEnv IM.empty IM.empty IM.empty IS.empty) outs
     pure (res, tt, gE<$>es')
-run flush j e ctxs | TyB TyStream:$_ <- eLoc e = traverse_ (traverse_ (pS flush)).flip evalState j $ do
+run flush j e ctxs | TyB TyStream:$_ <- eLoc e = traverse_ (traverse_ (pS flush)).uStream j $ do
     t <- nI
     (iEnv, μ) <- ctx e t
     u <- nI
     let outs=μ<$>ctxs; es={-# SCC "scanMain" #-} scanl' (&) (Σ u iEnv IM.empty IM.empty IM.empty IS.empty) outs
     pure ((! t).gE<$>es)
-run _ j e ctxs = pDocLn $ flip evalState j $ do
+run _ j e ctxs = pDocLn $ uStream j $ do
     (iEnv, g, e0) <- collect e
     u <- nI
     let updates=g<$>ctxs
         finEnv=foldl' (&) (Σ u iEnv IM.empty IM.empty IM.empty IS.empty) updates
     e0@>(fromMaybe (throw EmptyFold)<$>gE finEnv)
 
-unit :: E T -> MM (Maybe Tmp, [Tmp], Env, LineCtx -> Σ -> Σ)
+unit :: E T -> UM (Maybe Tmp, [Tmp], Env, LineCtx -> Σ -> Σ)
 unit (Anchor _ es) = do
     tt <- traverse (\_ -> nI) es
     (iEnvs, μs) <- unzip <$> zipWithM ctx es tt
@@ -136,7 +136,7 @@ pDocLn :: E T -> IO ()
 pDocLn (Lit _ (FLit f)) = hPutBuilder stdout (doubleDec f <> "\n")
 pDocLn e                = putDoc (pretty e <> hardline)
 
-collect :: E T -> MM (Env, LineCtx -> Σ -> Σ, E T)
+collect :: E T -> UM (Env, LineCtx -> Σ -> Σ, E T)
 collect e@(EApp ty (EApp _ (EApp _ (TB _ Fold) _) _) _) = do
     v <- nN ty
     (iEnv, g) <- φ e (unU$unique v)
@@ -198,7 +198,7 @@ f @. g = \l -> f l.g l
 ts :: [LineCtx -> Σ -> Σ] -> LineCtx -> Σ -> Σ
 ts = foldl' (@.) (\_ -> id)
 
-φ :: E T -> Tmp -> MM (Env, LineCtx -> Σ -> Σ)
+φ :: E T -> Tmp -> UM (Env, LineCtx -> Σ -> Σ)
 φ (EApp _ (EApp _ (EApp _ (TB _ Fold) op) seed) xs) tgt = do
     t <- nI
     seed' <- seed @> mempty
@@ -256,7 +256,7 @@ ts = foldl' (@.) (\_ -> id)
 ni t=IM.singleton t Nothing
 na=IM.alter go where go Nothing = Just Nothing; go x@Just{} = x
 
-ctx :: E T -> Tmp -> MM (Env, LineCtx -> Σ -> Σ)
+ctx :: E T -> Tmp -> UM (Env, LineCtx -> Σ -> Σ)
 ctx AllColumn{} res                                      = pure (ni res, \ ~(b, _, _) -> mE$res~!mkStr b)
 ctx (ParseAllCol (_:$TyB TyI)) res                       = pure (ni res, \ ~(b, _, _) -> mE$res~!parseAsEInt b)
 ctx (ParseAllCol (_:$TyB TyFloat)) res                   = pure (ni res, \ ~(b, _, _) -> mE$res~!parseAsF b)
