@@ -33,6 +33,7 @@ main :: IO ()
 main = defaultMain $
     sequentialTestGroup "stream" AllFinish [
         harness "examples/otool/rpath.jac" (AWK Nothing Nothing) "test/data/otool" "test/golden/rpath.out"
+      , harness "examples/otool/dllibs.jac" (AWK Nothing Nothing) "test/data/otool" "test/golden/ldlib.out"
       , testGroup "Jacinda interpreter"
           [ testCase "parse as" (parseTo sumBytes sumBytesAST)
           , splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]

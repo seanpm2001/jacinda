@@ -1,0 +1,6 @@
+@rpath/libHSapple-0.3.0.0-inplace-ghc9.10.1.dylib
+@rpath/libHSbytestring-0.12.1.0-5f32-ghc9.10.1.dylib
+@rpath/libHSghc-internal-9.1001.0-4685-ghc9.10.1.dylib
+@rpath/libHSghc-prim-0.11.0-e020-ghc9.10.1.dylib
+@rpath/libHSrts-1.0.2-ghc9.10.1.dylib
+/usr/lib/libSystem.B.dylib
