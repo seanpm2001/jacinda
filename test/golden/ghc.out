@@ -1,0 +1,40 @@
+https://www.haskell.org/ghc/  GHCi-7
+    • No explicit implementation for
+    • In the instance declaration for ‘Num Exp’
+
+warning /Users/vanessa/dev/haskell/apple/src/Asm/X86/P.hs:40:40-5
+    Defined but not used: ‘fregs’
+
+warning /Users/vanessa/dev/haskell/apple/src/Asm/Aarch64/P.hs:42:40-5
+    Defined but not used: ‘fregs’
+
+warning /Users/vanessa/dev/haskell/apple/src/Asm/Aarch64/Byte.hs:287:104-18
+    Literal 18446462598732840960 is out of the Int range -9223372036854775808..9223372036854775807
+
+warning /Users/vanessa/dev/haskell/apple/src/Asm/Aarch64/Byte.hs:300:109-18
+    Literal 18446462598732840960 is out of the Int range -9223372036854775808..9223372036854775807
+
+warning /Users/vanessa/dev/haskell/apple/src/C.hs:272:11-2
+    Defined but not used: ‘ds’
+
+warning /Users/vanessa/dev/haskell/apple/src/Ty.hs:364:6-1
+    Defined but not used: ‘f’
+
+warning /Users/vanessa/dev/haskell/apple/src/Ty.hs:364:8-1
+    Defined but not used: ‘l’
+
+warning /Users/vanessa/dev/haskell/apple/src/Ty.hs:364:10-3
+    Defined but not used: ‘inp’
+
+warning /Users/vanessa/dev/haskell/apple/src/Ty.hs:364:17-2
+    Defined but not used: ‘t0’
+
+warning /Users/vanessa/dev/haskell/apple/src/Ty.hs:364:24-2
+    Defined but not used: ‘t1’
+
+warning /Users/vanessa/dev/haskell/apple/src/C/Trans.hs:15:58-7
+    The import of ‘foldl1'’ from module ‘Data.List’ is redundant
+
+warning /Users/vanessa/dev/haskell/apple/run/Main.hs:334:18-2
+    Defined but not used: ‘mp’
+

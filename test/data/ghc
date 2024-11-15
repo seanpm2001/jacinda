@@ -1,0 +1,1420 @@
+GHCi, version 9.10.1: https://www.haskell.org/ghc/  :? for help
+Command is not supported (yet) in multi-mode
+/Users/vanessa/dev/haskell/apple/src/IR.hs:139:10: warning: [GHC-06201] [-Wmissing-methods]
+    • No explicit implementation for
+        ‘abs’ and ‘signum’
+    • In the instance declaration for ‘Num Exp’
+    |
+139 | instance Num Exp where
+    |          ^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/IR.hs:142:10: warning: [GHC-06201] [-Wmissing-methods]
+    • No explicit implementation for
+        ‘abs’ and ‘signum’
+    • In the instance declaration for ‘Num (FExp ftemp Double e)’
+    |
+142 | instance Num (FExp ftemp Double e) where
+    |          ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Hs/A.hs:33:10: warning: [GHC-06201] [-Wmissing-methods]
+    • No explicit implementation for
+        ‘alignment’
+    • In the instance declaration for ‘Storable AB’
+   |
+33 | instance Storable AB where
+   |          ^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Hs/A.hs:35:15: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In a \case alternative:
+        Patterns of type ‘Word8’ not matched:
+            p where p is not one of {1, 0}
+   |
+35 |     peek p = (\case 1 -> T; 0 -> F) <$> peek (castPtr p :: Ptr Word8)
+   |               ^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Hs/A.hs:39:10: warning: [GHC-06201] [-Wmissing-methods]
+    • No explicit implementation for
+        ‘alignment’ and (either ‘poke’ or ‘pokeElemOff’ or ‘pokeByteOff’)
+    • In the instance declaration for ‘Storable (P2 a b)’
+   |
+39 | instance (Storable a, Storable b) => Storable (P2 a b) where
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Hs/A.hs:43:10: warning: [GHC-06201] [-Wmissing-methods]
+    • No explicit implementation for
+        ‘alignment’ and (either ‘poke’ or ‘pokeElemOff’ or ‘pokeByteOff’)
+    • In the instance declaration for ‘Storable (P3 a b c)’
+   |
+43 | instance (Storable a, Storable b, Storable c) => Storable (P3 a b c) where
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Hs/A.hs:47:10: warning: [GHC-06201] [-Wmissing-methods]
+    • No explicit implementation for
+        ‘alignment’ and (either ‘poke’ or ‘pokeElemOff’ or ‘pokeByteOff’)
+    • In the instance declaration for ‘Storable (P4 a b c d)’
+   |
+47 | instance (Storable a, Storable b, Storable c, Storable d) => Storable (P4 a b c d) where
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Hs/A.hs:69:10: warning: [GHC-06201] [-Wmissing-methods]
+    • No explicit implementation for
+        ‘alignment’
+    • In the instance declaration for ‘Storable (Apple a)’
+   |
+69 | instance Storable a => Storable (Apple a) where
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/IR/Hoist.hs:62:21: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In a case alternative:
+        Patterns of type ‘FTemp’ not matched:
+            F0
+            F1
+            F2
+            F3
+            ...
+   |
+62 | view f (F2Temp i) = case f (FTemp i) of (FTemp j) -> F2Temp j
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/IR/Hoist.hs:124:32: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Stmt, ControlAnn)’ not matched:
+            ((MJ _ _), _)
+            ((J _), _)
+            ((MT _ _), _)
+            ((MX _ _), _)
+            ...
+    |
+124 |     ss = getCf<$>IS.toList ns; (L lh,_) = getCf n
+    |                                ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/IR/Hoist.hs:128:14: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of S ‘su’
+    |
+128 |            , su :: !(M.Map FTemp FTemp)
+    |              ^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Frame.hs:29:11: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘handleRax’:
+        Patterns of type ‘CFunc’ not matched:
+            JR
+            Exp
+            Log
+            Pow
+   |
+29 |           handleRax Malloc = filter (/=Rax)
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Frame.hs:34:11: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘mx’:
+        Patterns of type ‘CFunc’ not matched:
+            JR
+            Exp
+            Log
+            Pow
+   |
+34 |           mx Free   = const []
+   |           ^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/Aarch64.hs:104:5: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘pw’:
+        Patterns of type ‘AbsReg’ not matched:
+            LR
+            FP
+            ASP
+    |
+104 |     pw (IReg i) = "W" <> pretty i
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/Aarch64.hs:116:27: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘pq’:
+        Patterns of type ‘V2Reg FAbsReg’ not matched:
+            V2Reg FArg0
+            V2Reg FArg1
+            V2Reg FArg2
+            V2Reg FArg3
+            ...
+    |
+116 | instance SIMD F2Abs where pq (V2Reg (FReg i)) = "~Q" <> pretty i; pv (V2Reg (FReg i)) = "~V" <> pretty i
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/Aarch64.hs:116:67: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘pv’:
+        Patterns of type ‘V2Reg FAbsReg’ not matched:
+            V2Reg FArg0
+            V2Reg FArg1
+            V2Reg FArg2
+            V2Reg FArg3
+            ...
+    |
+116 | instance SIMD F2Abs where pq (V2Reg (FReg i)) = "~Q" <> pretty i; pv (V2Reg (FReg i)) = "~V" <> pretty i
+    |                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/Aarch64.hs:215:8: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In a case alternative:
+        Patterns of type ‘String’ not matched:
+            []
+            (p:_) where p is not one of {'l', 'd'}
+            ['l']
+            ('l':p:_) where p is not one of {'i'}
+            ...
+    |
+215 | pSym = case os of {"linux" -> id; "darwin" -> ("_"<>)}.pretty
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/CF.hs:78:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘usesF’:
+        Patterns of type ‘X86 reg freg ann’ not matched:
+            Vfmadd213sd _ _ _ _
+            Vfmsub231sd _ _ _ _
+            Vfmsub213sd _ _ _ _
+            Vfmsub132sd _ _ _ _
+            ...
+   |
+78 | usesF (Movapd _ _ r)            = singleton r
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/CF.hs:165:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘uses’:
+        Patterns of type ‘X86 reg freg ann’ not matched:
+            Vfmadd213sd _ _ _ _
+            Vfmsub231sd _ _ _ _
+            Vfmsub213sd _ _ _ _
+            Vfmsub132sd _ _ _ _
+            ...
+    |
+165 | uses (MovRR _ _ r)          = singleton r
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/CF.hs:254:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘defsF’:
+        Patterns of type ‘X86 reg freg ann’ not matched:
+            Vfmadd213sd _ _ _ _
+            Vfmsub231sd _ _ _ _
+            Vfmsub213sd _ _ _ _
+            Vfmsub132sd _ _ _ _
+            ...
+    |
+254 | defsF (Movapd _ r _)         = singleton r
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/CF.hs:342:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘defs’:
+        Patterns of type ‘X86 reg freg ann’ not matched:
+            Vfmadd213sd _ _ _ _
+            Vfmsub231sd _ _ _ _
+            Vfmsub213sd _ _ _ _
+            Vfmsub132sd _ _ _ _
+            ...
+    |
+342 | defs (MovRR _ r _)     = singleton r
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Sp.hs:54:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘ao’: Patterns of type ‘Int’ not matched: _
+   |
+54 | ao o | Just i8 <- mi8 o = RC BP i8
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/Aarch64/Fr.hs:65:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘fi’:
+        Patterns of type ‘a’ not matched:
+            p where p is not one of {(-46), (-45), (-44), ...}
+   |
+65 | fi 10 = D0; fi 11 = D1; fi 12 = D2; fi 13 = D3
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/Aarch64/Sp.hs:55:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘ao’: Patterns of type ‘Int’ not matched: _
+   |
+55 | ao o | Just w16 <- m16 o = RP FP w16
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/G.hs:261:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘freeze’:
+        Patterns of type ‘K’, ‘St’ not matched: _ _
+    |
+261 | freeze ᴋ s | Just (u, _) <- IS.minView (fr$wkls s) =
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/G.hs:286:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘coalesce’:
+        Patterns of type ‘K’, ‘St’ not matched: _ _
+    |
+286 | coalesce ᴋ s | Just (m@(x,y), nWl) <- S.minView (wl$mvS s) =
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/G.hs:299:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘sspill’:
+        Patterns of type ‘K’, ‘St’ not matched: _ _
+    |
+299 | sspill ᴋ s | Just (m, nSp) <- IS.minView (sp$wkls s) = freezeMoves ᴋ m $ mapWk (iSimp m . \wk -> wk { sp = nSp }) s
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/P.hs:38:29: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In a case alternative:
+        Patterns of type ‘(Either
+                             Data.IntSet.Internal.IntSet (IM.IntMap X86Reg),
+                           Either
+                             Data.IntSet.Internal.IntSet (IM.IntMap FX86Reg))’ not matched:
+            ((Right _), (Left _))
+            ((Left _), (Left _))
+   |
+38 |               where rmaps = case (regsM, fregsM) of
+   |                             ^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/P.hs:40:40: warning: [GHC-40910] [-Wunused-matches]
+    Defined but not used: ‘fregs’
+   |
+40 |                         (Left s, Right fregs) ->
+   |                                        ^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/Aarch64/P.hs:37:29: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In a case alternative:
+        Patterns of type ‘(Either
+                             Data.IntSet.Internal.IntSet (IM.IntMap AReg),
+                           Either Data.IntSet.Internal.IntSet (IM.IntMap FAReg))’ not matched:
+            ((Right _), (Left _))
+            ((Left _), (Left _))
+   |
+37 |               where rmaps = case (regsM, fregsM) of
+   |                             ^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/Aarch64/P.hs:42:40: warning: [GHC-40910] [-Wunused-matches]
+    Defined but not used: ‘fregs’
+   |
+42 |                         (Left s, Right fregs) ->
+   |                                        ^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:116:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘bitC’:
+        Patterns of type ‘Word8’ not matched:
+            p where p is not one of {0, 1}
+    |
+116 | bitC 0x0 = 0x1
+    | ^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:147:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘mkVexA’:
+        Patterns of type ‘Word8’, ‘PP’, ‘VEXM’, ‘FX86Reg’, ‘FX86Reg’,
+                         ‘Addr X86Reg’ not matched:
+            _ _ _ _ _ (R _)
+            _ _ _ _ _ (RC32 _ _)
+            _ _ _ _ _ (RS _ _ _)
+            _ _ _ _ _ (RC Rcx _)
+            ...
+    |
+147 | mkVexA opc pp mm xr0 xr1 (RSD b s i d)=
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:346:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Word8, Word8)’ not matched:
+            (p, _) where p is not one of {0}
+    |
+346 |         (0, b1) = modRM r1
+    |         ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:362:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Word8, Word8)’ not matched:
+            (p, _) where p is not one of {0}
+    |
+362 |         (0, b1) = modRM r1
+    |         ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:392:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Word8, Word8)’ not matched:
+            (p, _) where p is not one of {0}
+    |
+392 |     let (0, b1) = modRM r1
+    |         ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:430:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Word8, Word8)’ not matched:
+            (p, _) where p is not one of {0}
+            (p, _) where p is not one of {0}
+    |
+430 |         (0, b1) = modRM r1
+    |         ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:445:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Word8, Word8)’ not matched:
+            (p, _) where p is not one of {0}
+    |
+445 |     let (0, b0) = modRM r0
+    |         ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:451:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Word8, Word8)’ not matched:
+            (p, _) where p is not one of {0}
+    |
+451 |     let (0, bb) = modRM rb
+    |         ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:755:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Word8, Word8)’ not matched:
+            (p, _) where p is not one of {0}
+    |
+755 |     let (0, b) = modRM Rsp
+    |         ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:781:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Word8, Word8)’ not matched:
+            (p, _) where p is not one of {0}
+    |
+781 |         (0, bi) = modRM Rsp
+    |         ^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:789:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Word8, Word8)’ not matched:
+            (p, _) where p is not one of {0}
+    |
+789 |         (0, bi) = modRM Rsp
+    |         ^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:839:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Word8, Word8)’ not matched:
+            (p, _) where p is not one of {0}
+    |
+839 |     let (0, bi) = modRM ar
+    |         ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/X86/Byte.hs:846:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Word8, Word8)’ not matched:
+            (p, _) where p is not one of {0}
+    |
+846 |     let (0, bi) = modRM ar
+    |         ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/Aarch64/Byte.hs:287:104: warning: [GHC-97441] [-Woverflowed-literals]
+    Literal 18446462598732840960 is out of the Int range -9223372036854775808..9223372036854775807
+    |
+287 |         w0=p .&. 0xffff; w1=(p .&. 0xffff0000) `lsr` 16; w2=(p .&. 0xFFFF00000000) `lsr` 32; w3=(p .&. 0xFFFF000000000000) `lsr` 48
+    |                                                                                                        ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Asm/Aarch64/Byte.hs:295:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘rpf’:
+        Patterns of type ‘Pfop’ not matched:
+            Pfop PLI _ _
+            Pfop PLD L2 _
+            Pfop PLD L3 _
+            Pfop PST L2 _
+            ...
+    |
+295 | rpf (Pfop PLD L1 Keep) = 0b0
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Asm/Aarch64/Byte.hs:300:109: warning: [GHC-97441] [-Woverflowed-literals]
+    Literal 18446462598732840960 is out of the Int range -9223372036854775808..9223372036854775807
+    |
+300 | m4 r a = let w0=a .&. 0xffff; w1=(a .&. 0xffff0000) `lsr` 16; w2=(a .&. 0xFFFF00000000) `lsr` 32; w3=(a .&. 0xFFFF000000000000) `lsr` 48
+    |                                                                                                             ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C.hs:113:10: warning: [GHC-06201] [-Wmissing-methods]
+    • No explicit implementation for
+        ‘abs’ and ‘signum’
+    • In the instance declaration for ‘Num CE’
+    |
+113 | instance Num CE where
+    |          ^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C.hs:120:10: warning: [GHC-06201] [-Wmissing-methods]
+    • No explicit implementation for
+        ‘abs’ and ‘signum’
+    • In the instance declaration for ‘Num (CFE t Double e)’
+    |
+120 | instance Num (CFE t Double e) where
+    |          ^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C.hs:272:11: warning: [GHC-40910] [-Wunused-matches]
+    Defined but not used: ‘ds’
+    |
+272 | prettyCS (ds,ss) = pCS (const"") ss
+    |           ^^
+
+/Users/vanessa/dev/haskell/apple/src/IR/C.hs:45:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘cToIRM’:
+        Patterns of type ‘CS a’ not matched: PlProd _ _ []
+   |
+45 | cToIRM (G _ l retL)          = pure [IR.C l, IR.L retL]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/IR/C.hs:167:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘irAt’:
+        Patterns of type ‘ArrAcc’ not matched: At _ _ _ _ _
+    |
+167 | irAt (ARnk t l)                                                = AP (ctemp t) Nothing l
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/CF.hs:308:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘uses’:
+        Patterns of type ‘CS a’ not matched:
+            For _ _ _ _ _ _
+            Rof _ _ _ _
+            Rof1 _ _ _ _
+            R2of _ _ _ _ _
+            ...
+    |
+308 | uses (Ma _ _ _ _ r n _)    = uE r<>uE n
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Alloc.hs:28:35: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of Ss ‘mLive’
+   |
+28 | data Slots = Ss { keep :: !Alias, mLive :: [(AL, Sh ())] }
+   |                                   ^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/A.hs:201:5: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘pt’:
+        Patterns of type ‘E (T a)’ not matched:
+            Dfn _ _
+            ResVar _ _
+            Parens _ _
+            Ann _ _ _
+            ...
+    |
+201 |     pt (Var t n)                                             = parens (pretty n <+> ":" <+> pretty t)
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Ty/Clone.hs:63:5: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘cT’: Patterns of type ‘T a’ not matched: Ρ _ _
+   |
+63 |     cT F            = pure F
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Ty.hs:40:24: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of Subst ‘tySubst’
+   |
+40 | data Subst a = Subst { tySubst :: IM.IntMap (T a)
+   |                        ^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Ty.hs:42:24: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of Subst ‘sSubst’
+   |
+42 |                      , sSubst  :: IM.IntMap (Sh a) -- ^ Shape variables
+   |                        ^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Ty.hs:114:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘mI’:
+        Patterns of type ‘Focus’, ‘I a’, ‘I a’ not matched:
+            RF (IEVar _ _) (Ix _ _)
+            RF (IEVar _ _) (StaPlus _ _ _)
+            RF (IEVar _ _) (StaMul _ _ _)
+            LF (IEVar _ _) (StaPlus _ _ _)
+            ...
+    |
+114 | mI f i0@(Ix _ i) i1@(Ix _ j) | i == j = Right mempty
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Ty.hs:364:6: warning: [GHC-40910] [-Wunused-matches]
+    Defined but not used: ‘f’
+    |
+364 | mgSh f l inp (Π t0) (Π t1) = undefined
+    |      ^
+
+/Users/vanessa/dev/haskell/apple/src/Ty.hs:364:8: warning: [GHC-40910] [-Wunused-matches]
+    Defined but not used: ‘l’
+    |
+364 | mgSh f l inp (Π t0) (Π t1) = undefined
+    |        ^
+
+/Users/vanessa/dev/haskell/apple/src/Ty.hs:364:10: warning: [GHC-40910] [-Wunused-matches]
+    Defined but not used: ‘inp’
+    |
+364 | mgSh f l inp (Π t0) (Π t1) = undefined
+    |          ^^^
+
+/Users/vanessa/dev/haskell/apple/src/Ty.hs:364:17: warning: [GHC-40910] [-Wunused-matches]
+    Defined but not used: ‘t0’
+    |
+364 | mgSh f l inp (Π t0) (Π t1) = undefined
+    |                 ^^
+
+/Users/vanessa/dev/haskell/apple/src/Ty.hs:364:24: warning: [GHC-40910] [-Wunused-matches]
+    Defined but not used: ‘t1’
+    |
+364 | mgSh f l inp (Π t0) (Π t1) = undefined
+    |                        ^^
+
+/Users/vanessa/dev/haskell/apple/src/Ty.hs:503:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘tydrop’:
+        Patterns of type ‘Int’, ‘Sh a’ not matched:
+            p Nil where p is not one of {0}
+            p (SVar _) where p is not one of {0}
+            p (Rev _) where p is not one of {0}
+            p (Cat _ _) where p is not one of {0}
+            ...
+    |
+503 | tydrop 0 sh            = sh
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Ty.hs:810:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘checkTy’:
+        Patterns of type ‘T a’, ‘(C, a)’ not matched:
+            (P _) (IsOrd, _)
+            (P _) (IsEq, _)
+            (Ρ _ _) (IsOrd, _)
+            (Ρ _ _) (IsEq, _)
+            ...
+    |
+810 | checkTy (TVar n) (c, _)       = pure $ Just(n, c)
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Ty.hs:847:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘tyE’:
+        Patterns of type ‘Subst a’, ‘E a’ not matched: _ (Id _ _)
+    |
+847 | tyE s (EApp _ (Builtin _ Re) (ILit _ n)) = do
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/R/Dfn.hs:9:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘dedfn’:
+        Patterns of type ‘E a’ not matched: Id _ _
+  |
+9 | dedfn e@ILit{} = e
+  | ^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/R/Dfn.hs:37:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘replaceXY’:
+        Patterns of type ‘a -> Nm a’, ‘a -> Nm a’, ‘E a’ not matched:
+            _ _ (Dfn _ _)
+            _ _ (Parens _ _)
+            _ _ (Id _ _)
+   |
+37 | replaceXY _ y (ResVar l Y) = (Var l (y l), True)
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/R.hs:70:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘rE’:
+        Patterns of type ‘E a’ not matched:
+            Dfn _ _
+            ResVar _ _
+            Parens _ _
+            Id _ (FoldSOfZip _ _ _)
+            ...
+   |
+70 | rE (Lam l n e) = doLocal $ do
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/run/QC.hs:36:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘gg’:
+        Patterns of type ‘Sh a’ not matched:
+            Rev _
+            Cat _ _
+            Π _
+            Cons (IEVar _ _) _
+            ...
+   |
+36 | gg Nil = pure (0, [])
+   | ^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/run/QC.hs:74:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘ga’:
+        Patterns of type ‘T a’ not matched:
+            Li _
+            TVar _
+            Arrow _ _
+            P _
+            ...
+   |
+74 | ga (Arr sh A.F) = do
+   | ^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Parser/Rw.hs:43:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘fi’:
+        Patterns of type ‘Builtin’ not matched:
+            Log
+            IDiv
+            Neg
+            Sqrt
+            ...
+   |
+43 | fi C = 9
+   | ^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Parser/Rw.hs:59:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘lassoc’:
+        Patterns of type ‘Builtin’ not matched:
+            Log
+            IDiv
+            Neg
+            Sqrt
+            ...
+   |
+59 | lassoc IntExp = False
+   | ^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/CGen.hs:18:5: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘pretty’:
+        Patterns of type ‘CType’ not matched:
+            ΠC []
+            ΠC ((AC _):_)
+            ΠC ((ΠC _):_)
+            ΠC ((SC CI):_)
+            ...
+   |
+18 |     pretty (AC CR)="Af"; pretty (AC CI)="Ai"; pretty (AC CB)="Ab"
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/CGen.hs:56:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘cTy’:
+        Patterns of type ‘T a’ not matched:
+            Li _
+            TVar _
+            Ρ _ _
+            Arrow (Arr _ _) _
+            ...
+   |
+56 | cTy F                 = pure (SC CR)
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/CGen.hs:69:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘irTy’: Patterns of type ‘T a’ not matched: Li _
+   |
+69 | irTy F                 = pure ([], F)
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/A/Opt.hs:25:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘optA’:
+        Patterns of type ‘E (T ())’ not matched:
+            Def _ _ _
+            Dfn _ _
+            ResVar _ _
+            Parens _ _
+            ...
+   |
+25 | optA (ILit F x)            = pure (FLit F (realToFrac x))
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/A/Opt.hs:25:1: warning: [GHC-61505]
+    Pattern match checker ran into -fmax-pmcheck-models=30 limit, so
+      • Redundant clauses might not be reported at all
+      • Redundant clauses might be reported as inaccessible
+      • Patterns reported as unmatched might actually be matched
+    Suggested fix:
+      Increase the limit or resolve the warnings to suppress this message.
+   |
+25 | optA (ILit F x)            = pure (FLit F (realToFrac x))
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/A/Eta.hs:20:114: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘T ()’ not matched:
+            Arr _ _
+            F
+            I
+            B
+            ...
+   |
+20 |     lApps <- traverse (\t -> do { n <- nextN t ; pure (\e' -> let t' = eAnn e' in Lam (t ~> t') n e', \e' -> let Arrow _ cod = eAnn e' in EApp cod e' (Var t n)) }) ts
+   |                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/A/Eta.hs:69:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘ηM’:
+        Patterns of type ‘E (T ())’ not matched:
+            Let _ _ _
+            Def _ _ _
+            Dfn _ _
+            ResVar _ _
+            ...
+   |
+69 | ηM e@FLit{}                = pure e
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/I.hs:62:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘iM’:
+        Patterns of type ‘E (T ())’ not matched: Id _ _
+   |
+62 | iM e@Builtin{} = pure e
+   | ^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/I.hs:91:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘bM’:
+        Patterns of type ‘E (T ())’ not matched:
+            Let _ _ _
+            Def _ _ _
+   |
+91 | bM e@Builtin{} = pure e
+   | ^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:15:58: warning: [GHC-38856] [-Wunused-imports]
+    The import of ‘foldl1'’ from module ‘Data.List’ is redundant
+   |
+15 | import           Data.List                        (find, foldl1', scanl')
+   |                                                          ^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:26:18: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of CSt ‘tempU’
+   |
+26 | data CSt = CSt { tempU       :: !Int
+   |                  ^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:27:18: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of CSt ‘arrU’
+   |
+27 |                , arrU        :: !AL
+   |                  ^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:28:18: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of CSt ‘assemblerSt’
+   |
+28 |                , assemblerSt :: !Int
+   |                  ^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:29:18: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of CSt ‘label’
+   |
+29 |                , label       :: !Label
+   |                  ^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:33:18: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of CSt ‘d2vars’
+   |
+33 |                , d2vars      :: IM.IntMap F2Temp
+   |                  ^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:37:18: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of CSt ‘mts’
+   |
+37 |                , mts         :: IM.IntMap Temp
+   |                  ^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:96:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘bT’:
+        Patterns of type ‘T a’ not matched:
+            Li _
+            TVar _
+            Arrow _ _
+            Ρ _ _
+   |
+96 | bT (P ts)=sum (bT<$>ts); bT F=8; bT I=8; bT B=1; bT Arr{}=8
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:226:5: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘go’:
+        Patterns of type ‘E (T ())’, ‘[FTemp]’, ‘[Temp]’ not matched:
+            (ALit _ _) _ _
+            (Var _ _) _ _
+            (Builtin _ _) _ _
+            (EApp _ _ _) _ _
+            ...
+    |
+226 |     go (Lam _ x@(Nm _ _ F) e) (fr:frs) rs = addD x fr *> go e frs rs
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:227:79: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘bt’:
+        Patterns of type ‘Temp’ not matched:
+            ATemp _
+            C0
+            C1
+            C2
+            ...
+    |
+227 |     go (Lam _ x@(Nm _ _ B) e) frs (r:rs) = addB x (bt r) *> go e frs rs where bt (ITemp i)=BTemp i
+    |                                                                               ^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:240:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘rtemp’:
+        Patterns of type ‘T a’ not matched:
+            Arr _ _
+            Li _
+            TVar _
+            Arrow _ _
+            ...
+    |
+240 | rtemp F=FT<$>nF; rtemp I=IT<$>nI; rtemp B=PT<$>nBT
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:252:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘hasS’:
+        Patterns of type ‘E a’ not matched:
+            ALit _ _
+            ILit _ _
+            BLit _ _
+            Let _ _ _
+            ...
+    |
+252 | hasS (Builtin _ b)     = bS b
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:261:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘write2’:
+        Patterns of type ‘E (T ())’, ‘[F2Temp]’, ‘F2Temp’ not matched:
+            (ALit _ _) (_:_) _
+            (Var _ _) (_:_) _
+            (Builtin _ _) (_:_) _
+            (EApp _ _ _) (_:_) _
+            ...
+    |
+261 | write2 (Lam _ x e) (v:vs) vret = addD2 x v *> write2 e vs vret
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:268:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘writeF’:
+        Patterns of type ‘E (T ())’, ‘[Arg]’, ‘RT’ not matched:
+            (ALit _ _) (_:_) _
+            (Var _ _) (_:_) _
+            (Builtin _ _) (_:_) _
+            (EApp _ _ _) (_:_) _
+            ...
+    |
+268 | writeF (Lam _ x e) (AA r l:rs) ret = addAVar x (l,r) *> writeF e rs ret
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:307:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘arg’:
+        Patterns of type ‘T ()’, ‘Ix'd’ not matched: _ _
+    |
+307 | arg ty at | isR ty = do
+    | ^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:315:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘rW’:
+        Patterns of type ‘T ()’, ‘Ix'd’ not matched: _ _
+    |
+315 | rW ty at | isR ty = do
+    | ^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:337:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘art’:
+        Patterns of type ‘Arg’ not matched: AA _ _
+    |
+337 | art (IPA r)=IT r;art (FA r)=FT r; art (BA r)=PT r
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:406:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘codT’:
+        Patterns of type ‘T ()’ not matched:
+            Arr _ _
+            F
+            I
+            B
+            ...
+    |
+406 | codT (Arrow _ t@Arrow{}) = codT t; codT (Arrow _ t) = t
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:418:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘llet’:
+        Patterns of type ‘(Nm (T ()), E (T ()))’ not matched:
+            (_, _)
+            (_, _)
+    |
+418 | llet (n,e') | isArr (eAnn e') = do
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:432:16: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of AD ‘eigen’
+    |
+432 | data AD = AD { eigen :: !Temp, alabel :: !(Maybe AL), eit :: Maybe (T ())
+    |                ^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:432:32: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of AD ‘alabel’
+    |
+432 | data AD = AD { eigen :: !Temp, alabel :: !(Maybe AL), eit :: Maybe (T ())
+    |                                ^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:432:55: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of AD ‘eit’
+    |
+432 | data AD = AD { eigen :: !Temp, alabel :: !(Maybe AL), eit :: Maybe (T ())
+    |                                                       ^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:433:16: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of AD ‘elemSz’
+    |
+433 |              , elemSz :: Maybe Int64
+    |                ^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:434:16: warning: [GHC-40910] [-Wunused-top-binds]
+    Defined but not used: record field of AD ‘arrn’
+    |
+434 |              , arrn :: Maybe CE
+    |                ^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:440:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘fill’:
+        Patterns of type ‘E (T ())’, ‘AD’, ‘[RA]’ not matched:
+            (ALit _ _) _ _
+            (Var _ _) _ _
+            (Lam _ _ _) _ _
+            (ILit _ _) _ _
+            ...
+    |
+440 | fill (Builtin (Arr sh F) Eye) (AD t lA _ _ _) [] | Just [i,_] <- staIx sh = do
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:440:1: warning: [GHC-61505]
+    Pattern match checker ran into -fmax-pmcheck-models=30 limit, so
+      • Redundant clauses might not be reported at all
+      • Redundant clauses might be reported as inaccessible
+      • Patterns reported as unmatched might actually be matched
+    Suggested fix:
+      Increase the limit or resolve the warnings to suppress this message.
+    |
+440 | fill (Builtin (Arr sh F) Eye) (AD t lA _ _ _) [] | Just [i,_] <- staIx sh = do
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:502:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘afort’:
+        Patterns of type ‘T a’, ‘CE’, ‘IRel’, ‘CE’,
+                         ‘Temp -> [CS ()]’ not matched:
+            F _ _ _ _
+            I _ _ _ _
+            B _ _ _ _
+            (Li _) _ _ _ _
+            ...
+    |
+502 | afort (Arr sh _) el c eu ss = do {i <- nI; pure (for sh i el c eu (ss i))}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:622:5: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘w’:
+        Patterns of type ‘T a’, ‘ArrAcc’, ‘RT’ not matched:
+            _ _ (FT _)
+            _ _ (PT _)
+            _ _ (FT _)
+            _ _ (PT _)
+            ...
+    |
+622 |     w ty at tt      | isR ty = wt at tt
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:750:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘[Temp]’ not matched:
+            []
+            []
+            []
+    |
+750 |     let _:sstrides = sts; sss=init sssϵ
+    |         ^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:788:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘[Temp]’ not matched:
+            []
+            []
+            []
+    |
+788 |     let _:sstrides = sts; sss=init sssϵ
+    |         ^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:827:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘[Temp]’ not matched:
+            []
+            []
+            []
+    |
+827 |     let _:sstrides = sts; sss=init sssϵ
+    |         ^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:857:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘[Temp]’ not matched:
+            []
+            []
+            []
+    |
+857 |     let _:sstrides = sts; sss=init sssϵ
+    |         ^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:968:21: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In an irrefutable pattern:
+        Patterns of type ‘Maybe FTemp’ not matched:
+            Nothing
+            Nothing
+            Nothing
+    |
+968 |     (prologue, et, ~(Just zs)) <- if re xSh then pure (id, FTmp z0, Nothing) else do {zs <- nF; pure ((MX () zs 0:), FTmp zs+FTmp z0, Just zs)}
+    |                     ^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:1041:21: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In an irrefutable pattern:
+        Patterns of type ‘Maybe FTemp’ not matched:
+            Nothing
+            Nothing
+            Nothing
+     |
+1041 |     (prologue, et, ~(Just zs)) <- if ce bSh then pure (id, FTmp z0, Nothing) else do {zs <- nF; pure ((MX () zs 0:), FTmp zs+FTmp z0, Just zs)}
+     |                     ^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:1303:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘[Temp]’ not matched:
+            []
+            []
+            []
+            []
+     |
+1303 |     let _:sstrides = sts; (_:dstrides) = std
+     |         ^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:1303:27: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘[Temp]’ not matched:
+            []
+            []
+            []
+            []
+     |
+1303 |     let _:sstrides = sts; (_:dstrides) = std
+     |                           ^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:1396:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘[Temp]’ not matched:
+            []
+            []
+            []
+     |
+1396 |     let _:strides = sts; sss=init plS
+     |         ^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:1482:17: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In a case alternative:
+        Patterns of type ‘T ()’ not matched:
+            Arr _ _
+            Li _
+            TVar _
+            Arrow _ _
+            ...
+     |
+1482 |         eCond = case ty of
+     |                 ^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:1659:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘cond’:
+        Patterns of type ‘E (T ())’, ‘E (T ())’, ‘E (T ())’,
+                         ‘RT’ not matched:
+            (ALit _ _) _ _ _
+            (Var _ _) _ _ _
+            (Builtin _ _) _ _ _
+            (Lam _ _ _) _ _ _
+            ...
+     |
+1659 | cond (EApp _ (EApp _ (Builtin (Arrow F _) op) c0) c1) e e1 (FT t) | Just cmp <- frel op, Just cfe <- mFEval e1 = do
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:1810:17: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In a case alternative:
+        Patterns of type ‘FBin’ not matched:
+            FMinus
+            FDiv
+            FExp
+     |
+1810 |     let seed2 = case c0 of {FPlus -> MX2 () acc2 (ConstF (0,0)); FTimes -> MX2 () acc2 (ConstF (1,1)); FMax -> DS () acc2 acc; FMin -> DS () acc2 acc}
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:1831:17: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In a case alternative:
+        Patterns of type ‘FBin’ not matched:
+            FMinus
+            FDiv
+            FExp
+     |
+1831 |     let seedO = case c of {FPlus -> MX2 () acc2 (ConstF (0,0)); FTimes -> MX2 () acc2 (ConstF (1,1)); FMax -> DS () acc2 acc; FMin -> DS () acc2 acc}
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:1898:9: warning: [GHC-62161] [-Wincomplete-uni-patterns]
+    Pattern match(es) are non-exhaustive
+    In a pattern binding:
+        Patterns of type ‘(Label, [Arg], RT)’ not matched:
+            (_, [], _)
+            (_, (_:_:_), _)
+            (_, [_], (IT _))
+            (_, [_], (PT _))
+     |
+1898 |     let (l, [a], FT r) = getT st f
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/C/Trans.hs:1934:13: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In a case alternative:
+        Patterns of type ‘T ()’ not matched:
+            Li _
+            TVar _
+            Arrow _ _
+            P _
+            ...
+     |
+1934 |             case eAnn e of
+     |             ^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/as/As.hs:26:15: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In a case alternative:
+        Patterns of type ‘(String, String)’ not matched:
+            ([], _)
+            ((p:_), _) where p is not one of {'a'}
+            (['a'], _)
+            (('a':p:_), _) where p is not one of {'a'}
+            ...
+   |
+26 |           exe=case (arch, os) of {("aarch64",_) -> "as"; (_,"linux") -> "aarch64-linux-gnu-as"}
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/as/As.hs:26:15: warning: [GHC-61505]
+    Pattern match checker ran into -fmax-pmcheck-models=30 limit, so
+      • Redundant clauses might not be reported at all
+      • Redundant clauses might be reported as inaccessible
+      • Patterns reported as unmatched might actually be matched
+    Suggested fix:
+      Increase the limit or resolve the warnings to suppress this message.
+   |
+26 |           exe=case (arch, os) of {("aarch64",_) -> "as"; (_,"linux") -> "aarch64-linux-gnu-as"}
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/src/Dbg.hs:82:11: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘zipS’:
+        Patterns of type ‘[X86.X86 reg freg a]’,
+                         ‘[BS.ByteString]’ not matched:
+            [] (_:_)
+            ((X86.IAddRR _ _ _):_) []
+            ((X86.IAddRI _ _ _):_) []
+            ((X86.ISubRR _ _ _):_) []
+            ...
+   |
+82 |     where zipS [] []                 = []
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/src/Dbg.hs:93:11: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘zipS’:
+        Patterns of type ‘[Aarch64.AArch64 reg freg a]’,
+                         ‘[BS.ByteString]’ not matched:
+            [] (_:_)
+            ((Aarch64.B _ _):_) []
+            ((Aarch64.Blr _ _):_) []
+            ((Aarch64.Bl _ _):_) []
+            ...
+   |
+93 |     where zipS [] []                                    = []
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/run/Main.hs:334:18: warning: [GHC-40910] [-Wunused-matches]
+    Defined but not used: ‘mp’
+    |
+334 | freeAsm (sz, fp, mp) = freeFunPtr sz fp -- *> traverse_ free mp
+    |                  ^^
+
+/Users/vanessa/dev/haskell/apple/run/Main.hs:427:9: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘cb’:
+        Patterns of type ‘a’ not matched: p where p is not one of {0, 1}
+    |
+427 |         cb 0=False; cb 1=True
+    |         ^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/run/Main.hs:441:21: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In a case alternative:
+        Patterns of type ‘T ()’ not matched:
+            Li _
+            TVar _
+            Ρ _ _
+    |
+441 |                     case eAnn e of
+    |                     ^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/run/Main.hs:471:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘rSz’:
+        Patterns of type ‘T a’ not matched:
+            Li _
+            TVar _
+            A.Arrow _ _
+            Ρ _ _
+    |
+471 | rSz A.B=1; rSz I=8; rSz A.F=8; rSz (P ts) = sum (rSz<$>ts); rSz Arr{}=8
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/Users/vanessa/dev/haskell/apple/run/Main.hs:485:1: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘pR’:
+        Patterns of type ‘T a’, ‘Ptr b’ not matched:
+            (Arr _ _) _
+            (Li _) _
+            (TVar _) _
+            (A.Arrow _ _) _
+            ...
+    |
+485 | pR I p      = do {i <- peek (castPtr p :: Ptr Int64); pure (pretty i)}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+/Users/vanessa/dev/haskell/apple/run/Main.hs:554:35: warning: [GHC-62161] [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘sB’:
+        Patterns of type ‘a’ not matched: p where p is not one of {1, 0}
+    |
+554 |                             where sB 1 = "#t"; sB 0 = "#f"
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^
+
+lib/E.chs:155:1: error: [GHC-03355]
+    • Illegal foreign declaration: requires one of these back ends:
+      native code generator, LLVM, compiling via C,
+      compiling to JavaScript, or no code generated
+    • When checking declaration:
+        foreign export ccall "apple_compile" apple_compile
+          :: Ptr JitCtx
+             -> CString -> Ptr CSize -> Ptr (Ptr Word64) -> IO (Ptr Word8)
+    |
+155 | foreign export ccall apple_compile :: Ptr JitCtx -> CString -> Ptr CSize -> Ptr (Ptr Word64) -> IO (Ptr Word8)
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+lib/E.chs:156:1: error: [GHC-03355]
+    • Illegal foreign declaration: requires one of these back ends:
+      native code generator, LLVM, compiling via C,
+      compiling to JavaScript, or no code generated
+    • When checking declaration:
+        foreign export ccall "apple_printty" apple_printty
+          :: CString -> Ptr CString -> IO CString
+    |
+156 | foreign export ccall apple_printty :: CString -> Ptr CString -> IO CString
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+lib/E.chs:157:1: error: [GHC-03355]
+    • Illegal foreign declaration: requires one of these back ends:
+      native code generator, LLVM, compiling via C,
+      compiling to JavaScript, or no code generated
+    • When checking declaration:
+        foreign export ccall "apple_dumpasm" apple_dumpasm
+          :: CString -> Ptr CString -> IO CString
+    |
+157 | foreign export ccall apple_dumpasm :: CString -> Ptr CString -> IO CString
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+lib/E.chs:158:1: error: [GHC-03355]
+    • Illegal foreign declaration: requires one of these back ends:
+      native code generator, LLVM, compiling via C,
+      compiling to JavaScript, or no code generated
+    • When checking declaration:
+        foreign export ccall "apple_dumpir" apple_dumpir
+          :: CString -> Ptr CString -> IO CString
+    |
+158 | foreign export ccall apple_dumpir :: CString -> Ptr CString -> IO CString
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+lib/E.chs:159:1: error: [GHC-03355]
+    • Illegal foreign declaration: requires one of these back ends:
+      native code generator, LLVM, compiling via C,
+      compiling to JavaScript, or no code generated
+    • When checking declaration:
+        foreign export ccall "apple_ty" apple_ty
+          :: CString -> Ptr CString -> IO (Ptr FnTy)
+    |
+159 | foreign export ccall apple_ty :: CString -> Ptr CString -> IO (Ptr FnTy)
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+lib/E.chs:160:1: error: [GHC-03355]
+    • Illegal foreign declaration: requires one of these back ends:
+      native code generator, LLVM, compiling via C,
+      compiling to JavaScript, or no code generated
+    • When checking declaration:
+        foreign export ccall "apple_print_ts_sz" apple_print_ts_sz
+          :: CString -> Ptr CSize -> Ptr CString -> IO CString
+    |
+160 | foreign export ccall apple_print_ts_sz :: CString -> Ptr CSize -> Ptr CString -> IO CString
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
