@@ -27,6 +27,8 @@ extra-source-files:
     doc/guide.pdf
     test/examples/*.jac
     examples/*.jac
+    test/golden/*.out
+    test/data/otool
 
 source-repository head
     type:     git
@@ -137,10 +139,12 @@ test-suite jacinda-test
     build-depends:
         base,
         jacinda-lib,
-        tasty,
         bytestring,
-        text,
-        tasty-hunit
+        silently,
+        tasty,
+        tasty-golden,
+        tasty-hunit,
+        text
 
 benchmark jacinda-bench
     import:           warnings
