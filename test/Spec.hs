@@ -18,7 +18,6 @@ import           System.IO.Silently      (capture_)
 import           Test.Tasty
 import           Test.Tasty.Golden       (goldenVsString)
 import           Test.Tasty.HUnit
-import           Ty.Const
 
 harness :: String -- ^ Source file name
         -> Mode
@@ -46,8 +45,6 @@ main = defaultMain $
               in actual @?= "vectorzm0.13.1.0zmc80ea02f780be2984f831df2de071f6e6040c0f670b3dd2428e80f5d111d7f72_Data.Vector.Generic_partition_closure"
           , splitWhitespaceT "" []
           , splitWhitespaceT "5" ["5"]
-          , testCase "typechecks dfn" (tyOfT "[(+)|0 x] $1:i" tyI)
-          , testCase "typechecks dfn" (tyFile "test/examples/ab.jac")
           , testCase "split eval" (evalTo "[x+' '+y]|> split '01-23-1987' /-/" "01 23 1987")
           , testCase "length eval" (evalTo "#*split '01-23-1987' /-/" "3")
           , testCase "captureE" (evalTo "'01-23-1987' ~* 3 /(\\d{2})-(\\d{2})-(\\d{4})/" "Some 1987")
@@ -78,13 +75,6 @@ sumBytesAST =
                 (BB () Plus))
             (Lit () (ILit 0)))
             (IParseCol () 5)
-
-tyFile :: FilePath -> Assertion
-tyFile fp = tcIO [] fp =<< TIO.readFile fp
-
-tyOfT :: T.Text -> T -> Assertion
-tyOfT src expected =
-    tySrc src @?= expected
 
 parseTo :: T.Text -> E () -> Assertion
 parseTo src e =

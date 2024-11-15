@@ -55,7 +55,6 @@ library jacinda-lib
         Parser
         Parser.Rw
         Ty
-        Ty.Const
         Jacinda.Regex
 
     hs-source-dirs:   src
@@ -66,6 +65,7 @@ library jacinda-lib
         Nm
         U
         R
+        Ty.Const
         Jacinda.Check.Field
         Jacinda.Backend.Const
         Jacinda.Backend.T
