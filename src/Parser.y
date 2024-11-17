@@ -127,6 +127,7 @@ import Prettyprinter (Pretty (pretty), (<+>), concatWith, squotes)
     if { TokKeyword $$ KwIf }
     then { TokKeyword $$ KwThen }
     else { TokKeyword $$ KwElse }
+    header { TokKeyword $$ KwHeader }
     usv { TokKeyword $$ KwUsv }
     asv { TokKeyword $$ KwAsv }
     csv { TokKeyword $$ KwCsv }
@@ -250,6 +251,7 @@ D :: { D AlexPosn }
   | set usv semicolon { SetUsv }
   | set csv semicolon { SetCsv }
   | flush semicolon { FlushDecl }
+  | set header semicolon { SetH }
   | fn name Args defEq E semicolon { FunDecl $2 $3 $5 }
   | fn name defEq E semicolon { FunDecl $2 [] $4 }
 

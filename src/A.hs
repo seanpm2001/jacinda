@@ -371,7 +371,7 @@ instance Show C where show=show.pretty
 -- decl
 data D a = SetFS T.Text | SetRS T.Text
          | FunDecl (Nm a) [Nm a] (E a)
-         | FlushDecl
+         | FlushDecl | SetH
          | SetAsv | SetUsv | SetCsv
          | SetOFS T.Text | SetORS T.Text
          deriving (Functor)
@@ -381,6 +381,7 @@ instance Pretty (D a) where
     pretty (SetRS rs)       = ":set rs :=" <+> "/" <> pretty rs <> "/;"
     pretty (FunDecl n ns e) = "fn" <+> pretty n <> tupled (pretty <$> ns) <+> ":=" <#> indent 2 (pretty e <> ";")
     pretty FlushDecl        = ":flush;"
+    pretty SetH             = ":set header;"
     pretty SetAsv           = ":set asv;"
     pretty SetUsv           = ":set usv;"
     pretty SetCsv           = ":set csv;"
@@ -408,6 +409,7 @@ getS (Program ds _) = foldl' go awk ds where
     go _ SetUsv                = AWK (Just "␞") (Just "␟") False
     go _ SetCsv                = CSV
     go (AWK fs _ b) (SetRS bs) = AWK fs (Just bs) b
+    go (AWK fs rs _) SetH      = AWK fs rs True
     go next _                  = next
 
 mapExpr :: (E a -> E a) -> Program a -> Program a

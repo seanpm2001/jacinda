@@ -289,6 +289,7 @@ tyDS s (SetORS bs) = pure (SetORS bs, s)
 tyDS s SetCsv      = pure (SetCsv, s)
 tyDS s SetAsv      = pure (SetAsv, s)
 tyDS s SetUsv      = pure (SetUsv, s)
+tyDS s SetH        = pure (SetH, s)
 tyDS s FlushDecl   = pure (FlushDecl, s)
 tyDS s (FunDecl n@(Nm _ (U i) _) [] e) = do
     (e', s') <- tyES s e
