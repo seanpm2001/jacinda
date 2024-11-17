@@ -381,7 +381,120 @@ We can specify `name` per-invocation like so:
 }
 ```
 
-# Examples
+# Learning Examples
+
+To get a flavor of Jacinda, see how it can be used in place of familiar tools:
+
+## wc
+
+To count lines:
+
+```
+(+)|0 [:1"$0
+```
+
+or
+
+```
+[y]|0 {|ix}
+```
+
+To count bytes in a file:
+
+```
+(+)|0 [#x+1]"$0
+```
+
+or
+
+```
+(+)|0 {|#`0+1}
+```
+
+## head
+
+To emulate `head -n60`, for instance:
+
+```
+{ix<=60}{`0}
+```
+
+## basename
+
+```
+fn fileName(x) :=
+  x ~* 2 /([^\/]*\/)*(.*)/;
+```
+
+will remove the directory part of a filename. It has type `Str -> Option Str`.
+
+## tr
+
+We can present the `PATH` with
+
+```
+echo $PATH | tr ':' '\n'
+```
+
+To do so in Jacinda, we use `:` as field separator, viz.
+
+```
+echo $PATH | ja -F: "{|[x+'\n'+y]|>\`$}"
+```
+
+``$` is all fields in a line, as a list.
+
+## uniq
+
+```
+fn step(acc, this) :=
+  if this = acc->1
+    then (this . None)
+    else (this . Some this);
+
+(->2):?step^(''.None) $0
+```
+
+This tracks the previous line and only adds the current line to the stream if it
+is different.
+
+## nl
+
+We can emulate `nl -b a` with:
+
+```
+{|sprintf '    %i  %s' (ix.`0)}
+```
+
+To count only non-blank lines:
+
+```
+fn empty(str) :=
+  #str = 0;
+
+fn step(acc, line) :=
+  if empty line
+    then (acc->1 . '')
+    else (acc->1 + 1 . line);
+
+fn process(x) :=
+  if !empty (x->2)
+    then sprintf '    %i\t%s' x
+    else '';
+
+process"step^(0 . '') $0
+```
+
+We could write `process` as
+
+```
+fn process(x) :=
+  ?!empty (x->2); sprintf '    %i\t%s' x; '';
+```
+
+using the laconic syntax for conditionals, `?<bool>;<expr>;<expr>`
+
+# Practical Examples
 
 ## File Sizes
 
@@ -515,119 +628,6 @@ printSpan:?{% /\|/}{`2}
 ```
 
 which only collects when `printSpan` returns a `Some`.
-
-## Unix Command-Line Tools
-
-To get a flavor of Jacinda, see how it can be used in place of familiar tools:
-
-### wc
-
-To count lines:
-
-```
-(+)|0 [:1"$0
-```
-
-or
-
-```
-[y]|0 {|ix}
-```
-
-To count bytes in a file:
-
-```
-(+)|0 [#x+1]"$0
-```
-
-or
-
-```
-(+)|0 {|#`0+1}
-```
-
-### head
-
-To emulate `head -n60`, for instance:
-
-```
-{ix<=60}{`0}
-```
-
-### basename
-
-```
-fn fileName(x) :=
-  x ~* 2 /([^\/]*\/)*(.*)/;
-```
-
-will remove the directory part of a filename.
-
-### tr
-
-We can present the `PATH` with
-
-```
-echo $PATH | tr ':' '\n'
-```
-
-To do so in Jacinda, we use `:` as field separator, viz.
-
-```
-echo $PATH | ja -F: "{|[x+'\n'+y]|>\`$}"
-```
-
-``$` is all fields in a line, as a list.
-
-### uniq
-
-```
-fn step(acc, this) :=
-  if this = acc->1
-    then (this . None)
-    else (this . Some this);
-
-(->2):?step^(''.None) $0
-```
-
-This tracks the previous line in a state and only adds the current line to the stream if it
-is different.
-
-### nl
-
-We can emulate `nl -b a` with:
-
-```
-{|sprintf '    %i  %s' (ix.`0)}
-```
-
-To count only non-blank lines:
-
-```
-fn empty(str) :=
-  #str = 0;
-
-fn step(acc, line) :=
-  if empty line
-    then (acc->1 . '')
-    else (acc->1 + 1 . line);
-
-fn process(x) :=
-  if !empty (x->2)
-    then sprintf '    %i\t%s' x
-    else '';
-
-process"step^(0 . '') $0
-```
-
-We could write `process` as
-
-```
-fn process(x) :=
-  ?!empty (x->2); sprintf '    %i\t%s' x; '';
-```
-
-using the laconic syntax for conditionals, `?<bool>;<expr>;<expr>`
 
 ## Extract Source from Cabal
 

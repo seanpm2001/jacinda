@@ -270,13 +270,8 @@ id="toc-define-values-on-the-command-line">Define Values on the
 Command-Line</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#examples" id="toc-examples">Examples</a>
-<ul>
-<li><a href="#file-sizes" id="toc-file-sizes">File Sizes</a></li>
-<li><a href="#vim-tags" id="toc-vim-tags">Vim Tags</a></li>
-<li><a href="#error-span" id="toc-error-span">Error Span</a></li>
-<li><a href="#unix-command-line-tools"
-id="toc-unix-command-line-tools">Unix Command-Line Tools</a>
+<li><a href="#learning-examples" id="toc-learning-examples">Learning
+Examples</a>
 <ul>
 <li><a href="#wc" id="toc-wc">wc</a></li>
 <li><a href="#head" id="toc-head">head</a></li>
@@ -285,6 +280,12 @@ id="toc-unix-command-line-tools">Unix Command-Line Tools</a>
 <li><a href="#uniq" id="toc-uniq">uniq</a></li>
 <li><a href="#nl" id="toc-nl">nl</a></li>
 </ul></li>
+<li><a href="#practical-examples" id="toc-practical-examples">Practical
+Examples</a>
+<ul>
+<li><a href="#file-sizes" id="toc-file-sizes">File Sizes</a></li>
+<li><a href="#vim-tags" id="toc-vim-tags">Vim Tags</a></li>
+<li><a href="#error-span" id="toc-error-span">Error Span</a></li>
 <li><a href="#extract-source-from-cabal"
 id="toc-extract-source-from-cabal">Extract Source from Cabal</a>
 <ul>
@@ -538,12 +539,71 @@ fn field(r) :=
     title={A Mathematical Theory of Communication},
     volume={27},
 }</code></pre>
-<h1 id="examples">Examples</h1>
+<h1 id="learning-examples">Learning Examples</h1>
+<p>To get a flavor of Jacinda, see how it can be used in place of
+familiar tools:</p>
+<h2 id="wc">wc</h2>
+<p>To count lines:</p>
+<pre><code>(+)|0 [:1&quot;$0</code></pre>
+<p>or</p>
+<pre><code>[y]|0 {|ix}</code></pre>
+<p>To count bytes in a file:</p>
+<pre><code>(+)|0 [#x+1]&quot;$0</code></pre>
+<p>or</p>
+<pre><code>(+)|0 {|#`0+1}</code></pre>
+<h2 id="head">head</h2>
+<p>To emulate <code>head -n60</code>, for instance:</p>
+<pre><code>{ix&lt;=60}{`0}</code></pre>
+<h2 id="basename">basename</h2>
+<pre><code>fn fileName(x) :=
+  x ~* 2 /([^\/]*\/)*(.*)/;</code></pre>
+<p>will remove the directory part of a filename. It has type
+<code>Str -&gt; Option Str</code>.</p>
+<h2 id="tr">tr</h2>
+<p>We can present the <code>PATH</code> with</p>
+<pre><code>echo $PATH | tr &#39;:&#39; &#39;\n&#39;</code></pre>
+<p>To do so in Jacinda, we use <code>:</code> as field separator,
+viz.</p>
+<pre><code>echo $PATH | ja -F: &quot;{|[x+&#39;\n&#39;+y]|&gt;\`$}&quot;</code></pre>
+<p>`<code>$</code> is all fields in a line, as a list.</p>
+<h2 id="uniq">uniq</h2>
+<pre><code>fn step(acc, this) :=
+  if this = acc-&gt;1
+    then (this . None)
+    else (this . Some this);
+
+(-&gt;2):?step^(&#39;&#39;.None) $0</code></pre>
+<p>This tracks the previous line and only adds the current line to the
+stream if it is different.</p>
+<h2 id="nl">nl</h2>
+<p>We can emulate <code>nl -b a</code> with:</p>
+<pre><code>{|sprintf &#39;    %i  %s&#39; (ix.`0)}</code></pre>
+<p>To count only non-blank lines:</p>
+<pre><code>fn empty(str) :=
+  #str = 0;
+
+fn step(acc, line) :=
+  if empty line
+    then (acc-&gt;1 . &#39;&#39;)
+    else (acc-&gt;1 + 1 . line);
+
+fn process(x) :=
+  if !empty (x-&gt;2)
+    then sprintf &#39;    %i\t%s&#39; x
+    else &#39;&#39;;
+
+process&quot;step^(0 . &#39;&#39;) $0</code></pre>
+<p>We could write <code>process</code> as</p>
+<pre><code>fn process(x) :=
+  ?!empty (x-&gt;2); sprintf &#39;    %i\t%s&#39; x; &#39;&#39;;</code></pre>
+<p>using the laconic syntax for conditionals,
+<code>?&lt;bool&gt;;&lt;expr&gt;;&lt;expr&gt;</code></p>
+<h1 id="practical-examples">Practical Examples</h1>
 <h2 id="file-sizes">File Sizes</h2>
 <p>To find the total size of files in a directory:</p>
-<div class="sourceCode" id="cb37"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="kw">|</span> <span class="ex">ja</span> <span class="st">&#39;(+)|0 {ix&gt;1}{`5:}&#39;</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="ex">79769</span></span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="kw">|</span> <span class="ex">ja</span> <span class="st">&#39;(+)|0 {ix&gt;1}{`5:}&#39;</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="ex">79769</span></span></code></pre></div>
 <p>We can define <code>prettyMem</code> as a library function, viz.</p>
 <pre><code>fn prettyMem(x) :=
   ?x&gt;=1073741824.0
@@ -556,9 +616,9 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href=
 <p>The <code>%f.2</code> format specifier limits output to two digits
 after the decimal point.</p>
 <p>Then:</p>
-<div class="sourceCode" id="cb39"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="kw">|</span> <span class="ex">ja</span> <span class="st">&quot;@include&#39;lib/prefixSizes.jac&#39; prettyMem((+)|0.0 {ix&gt;1}{</span><span class="dt">\`</span><span class="st">5:})&quot;</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="ex">77.89</span> kB</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="kw">|</span> <span class="ex">ja</span> <span class="st">&quot;@include&#39;lib/prefixSizes.jac&#39; prettyMem((+)|0.0 {ix&gt;1}{</span><span class="dt">\`</span><span class="st">5:})&quot;</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="ex">77.89</span> kB</span></code></pre></div>
 <h2 id="vim-tags">Vim Tags</h2>
 <p>Suppose we wish to generate vim tag files for our Jacinda programs.
 According to <code>:help tags-file-format</code> the desired format
@@ -630,64 +690,6 @@ Thus, we define a stream</p>
 <pre><code>printSpan:?{% /\|/}{`2}</code></pre>
 <p>which only collects when <code>printSpan</code> returns a
 <code>Some</code>.</p>
-<h2 id="unix-command-line-tools">Unix Command-Line Tools</h2>
-<p>To get a flavor of Jacinda, see how it can be used in place of
-familiar tools:</p>
-<h3 id="wc">wc</h3>
-<p>To count lines:</p>
-<pre><code>(+)|0 [:1&quot;$0</code></pre>
-<p>or</p>
-<pre><code>[y]|0 {|ix}</code></pre>
-<p>To count bytes in a file:</p>
-<pre><code>(+)|0 [#x+1]&quot;$0</code></pre>
-<p>or</p>
-<pre><code>(+)|0 {|#`0+1}</code></pre>
-<h3 id="head">head</h3>
-<p>To emulate <code>head -n60</code>, for instance:</p>
-<pre><code>{ix&lt;=60}{`0}</code></pre>
-<h3 id="basename">basename</h3>
-<pre><code>fn fileName(x) :=
-  x ~* 2 /([^\/]*\/)*(.*)/;</code></pre>
-<p>will remove the directory part of a filename.</p>
-<h3 id="tr">tr</h3>
-<p>We can present the <code>PATH</code> with</p>
-<pre><code>echo $PATH | tr &#39;:&#39; &#39;\n&#39;</code></pre>
-<p>To do so in Jacinda, we use <code>:</code> as field separator,
-viz.</p>
-<pre><code>echo $PATH | ja -F: &quot;{|[x+&#39;\n&#39;+y]|&gt;\`$}&quot;</code></pre>
-<p>`<code>$</code> is all fields in a line, as a list.</p>
-<h3 id="uniq">uniq</h3>
-<pre><code>fn step(acc, this) :=
-  if this = acc-&gt;1
-    then (this . None)
-    else (this . Some this);
-
-(-&gt;2):?step^(&#39;&#39;.None) $0</code></pre>
-<p>This tracks the previous line in a state and only adds the current
-line to the stream if it is different.</p>
-<h3 id="nl">nl</h3>
-<p>We can emulate <code>nl -b a</code> with:</p>
-<pre><code>{|sprintf &#39;    %i  %s&#39; (ix.`0)}</code></pre>
-<p>To count only non-blank lines:</p>
-<pre><code>fn empty(str) :=
-  #str = 0;
-
-fn step(acc, line) :=
-  if empty line
-    then (acc-&gt;1 . &#39;&#39;)
-    else (acc-&gt;1 + 1 . line);
-
-fn process(x) :=
-  if !empty (x-&gt;2)
-    then sprintf &#39;    %i\t%s&#39; x
-    else &#39;&#39;;
-
-process&quot;step^(0 . &#39;&#39;) $0</code></pre>
-<p>We could write <code>process</code> as</p>
-<pre><code>fn process(x) :=
-  ?!empty (x-&gt;2); sprintf &#39;    %i\t%s&#39; x; &#39;&#39;;</code></pre>
-<p>using the laconic syntax for conditionals,
-<code>?&lt;bool&gt;;&lt;expr&gt;;&lt;expr&gt;</code></p>
 <h2 id="extract-source-from-cabal">Extract Source from Cabal</h2>
 <p>We can use</p>
 <pre><code>ja -F&#39;\s*:\s*&#39; &#39;{%/hs-source-dirs/}{`2}&#39; -i jacinda.cabal</code></pre>
