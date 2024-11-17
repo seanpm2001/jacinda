@@ -1,5 +1,5 @@
-{-# LANGUAGE DeriveAnyClass    #-}
-{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric  #-}
 
 module A ( E (..), T (..), (~>), TB (..), C (..)
          , L (..), N (..), BBin (..), BTer (..)
