@@ -369,7 +369,7 @@ instance Pretty C where
 instance Show C where show=show.pretty
 
 -- decl
-data D a = SetFS T.Text | SetRS T.Text | SetBlock T.Text
+data D a = SetFS T.Text | SetRS T.Text
          | FunDecl (Nm a) [Nm a] (E a)
          | FlushDecl
          | SetAsv | SetUsv | SetCsv
@@ -377,7 +377,6 @@ data D a = SetFS T.Text | SetRS T.Text | SetBlock T.Text
          deriving (Functor)
 
 instance Pretty (D a) where
-    pretty (SetBlock bs)    = ":block" <+> "/" <> pretty bs <> "/;"
     pretty (SetFS bs)       = ":set fs :=" <+> "/" <> pretty bs <> "/;"
     pretty (SetRS rs)       = ":set rs :=" <+> "/" <> pretty rs <> "/;"
     pretty (FunDecl n ns e) = "fn" <+> pretty n <> tupled (pretty <$> ns) <+> ":=" <#> indent 2 (pretty e <> ";")
@@ -399,19 +398,15 @@ flushD :: Program a -> Bool
 flushD (Program ds _) = any p ds where p FlushDecl = True; p _ = False
 
 data Mode = CSV | AWK (Maybe T.Text) (Maybe T.Text) -- field, record
-                | Block T.Text (Maybe T.Text) (Maybe T.Text)
 
 getS :: Program a -> Mode
 getS (Program ds _) = foldl' go (AWK Nothing Nothing) ds where
-    go (AWK _ rs) (SetFS bs)     = AWK (Just bs) rs
-    go _ SetAsv                  = AWK (Just "\\x1f") (Just "\\x1e")
-    go _ SetUsv                  = AWK (Just "␞") (Just "␟")
-    go _ SetCsv                  = CSV
-    go (AWK fs _) (SetRS bs)     = AWK fs (Just bs)
-    go (Block t fs _) (SetRS bs) = Block t fs (Just bs)
-    go (Block t _ rs) (SetFS bs) = Block t (Just bs) rs
-    go (AWK fs rs) (SetBlock bs) = Block bs fs rs
-    go next _                    = next
+    go (AWK _ rs) (SetFS bs) = AWK (Just bs) rs
+    go _ SetAsv              = AWK (Just "\\x1f") (Just "\\x1e")
+    go _ SetUsv              = AWK (Just "␞") (Just "␟")
+    go _ SetCsv              = CSV
+    go (AWK fs _) (SetRS bs) = AWK fs (Just bs)
+    go next _                = next
 
 mapExpr :: (E a -> E a) -> Program a -> Program a
 mapExpr f (Program ds e) = Program ds (f e)

@@ -142,7 +142,6 @@ tokens :-
         val                      { mkKw KwVal }
         end                      { mkKw KwEnd }
         :set                     { mkKw KwSet }
-        :block                   { mkKw KwBlock }
         :flush                   { mkKw KwFlush }
         fn                       { mkKw KwFn }
         "@include"               { mkKw KwInclude }
@@ -371,9 +370,11 @@ instance Pretty Sym where
     pretty QuestionMark     = "?"
     pretty AmpAmp           = "@@"
 
-data Keyword = KwLet | KwIn
-             | KwVal | KwEnd
-             | KwSet | KwBlock
+data Keyword = KwLet
+             | KwIn
+             | KwVal
+             | KwEnd
+             | KwSet
              | KwFlush
              | KwFn
              | KwInclude
@@ -401,7 +402,6 @@ instance Pretty Keyword where
     pretty KwEnd     = "end"
     pretty KwFn      = "fn"
     pretty KwSet     = ":set"
-    pretty KwBlock   = ":block"
     pretty KwFlush   = ":flush"
     pretty KwInclude = "@include"
     pretty KwIf      = "if"
