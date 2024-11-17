@@ -5,7 +5,7 @@ module A ( E (..), T (..), (~>), TB (..), C (..)
          , L (..), N (..), BBin (..), BTer (..)
          , BUn (..), DfnVar (..)
          , D (..), Program (..)
-         , Mode (..)
+         , Mode (..), awk
          , mapExpr
          , getS, flushD
          ) where
@@ -397,16 +397,18 @@ instance Show (Program a) where show=show.pretty
 flushD :: Program a -> Bool
 flushD (Program ds _) = any p ds where p FlushDecl = True; p _ = False
 
-data Mode = CSV | AWK (Maybe T.Text) (Maybe T.Text) -- field, record
+awk = AWK Nothing Nothing False
+
+data Mode = CSV | AWK (Maybe T.Text) (Maybe T.Text) Bool -- field, record, include header in record split
 
 getS :: Program a -> Mode
-getS (Program ds _) = foldl' go (AWK Nothing Nothing) ds where
-    go (AWK _ rs) (SetFS bs) = AWK (Just bs) rs
-    go _ SetAsv              = AWK (Just "\\x1f") (Just "\\x1e")
-    go _ SetUsv              = AWK (Just "␞") (Just "␟")
-    go _ SetCsv              = CSV
-    go (AWK fs _) (SetRS bs) = AWK fs (Just bs)
-    go next _                = next
+getS (Program ds _) = foldl' go awk ds where
+    go (AWK _ rs b) (SetFS bs) = AWK (Just bs) rs b
+    go _ SetAsv                = AWK (Just "\\x1f") (Just "\\x1e") False
+    go _ SetUsv                = AWK (Just "␞") (Just "␟") False
+    go _ SetCsv                = CSV
+    go (AWK fs _ b) (SetRS bs) = AWK fs (Just bs) b
+    go next _                  = next
 
 mapExpr :: (E a -> E a) -> Program a -> Program a
 mapExpr f (Program ds e) = Program ds (f e)

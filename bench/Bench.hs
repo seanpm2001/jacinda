@@ -20,17 +20,17 @@ main =
                       , bench "succdiff" $ nfIO (silence $ runOnFile [] "" "(%)\\. {%/Apple/}{`3:}" [] CSV "bench/data/food-prices.csv")
                       ]
                 , bgroup "stream"
-                      [ bench "sprintf" $ nfIO (silence $ runOnFile [] "" "{%/infix(r|l)?\\s+\\d+/}{sprintf '- fixity: %s' `0}" [] (AWK Nothing Nothing) "src/A.hs")
-                      , bench "path" $ nfIO (silence $ runOnFile [] "" "{|[x+'\\n'+y]|>`$}" [] (AWK (Just ":") Nothing) "bench/data/PATH")
-                      , bench "RS" $ nfIO (silence $ runOnFile [] "" "$0" [] (AWK Nothing (Just ":")) "bench/data/PATH")
-                      , bench "runOnFile" $ nfIO (silence $ runOnFile [] "" "(+)|0 {%/Bloom/}{1}" [] (AWK Nothing Nothing) "bench/data/ulysses.txt")
-                      , bench "runOnFile/wc.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/wc.jac" ; runOnFile [] "examples/wc.jac" contents [] (AWK Nothing Nothing) "bench/data/ulysses.txt" })
-                      , bench "runOnFile/span2.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/span2.jac" ; runOnFile [] "examples/span2.jac" contents [] (AWK Nothing Nothing) "bench/data/span.txt" })
-                      , bench "sedstream.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/sedstream.jac" ; runOnFile [] "examples/sedstream.jac" contents [] (AWK Nothing Nothing) "bench/data/lines.txt" })
-                      , bench "gnused.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/gnused.jac" ; runOnFile [] "exampes/gnused.jac" contents [] (AWK Nothing Nothing) "bench/data/lines.txt" })
+                      [ bench "sprintf" $ nfIO (silence $ runOnFile [] "" "{%/infix(r|l)?\\s+\\d+/}{sprintf '- fixity: %s' `0}" [] awk "src/A.hs")
+                      , bench "path" $ nfIO (silence $ runOnFile [] "" "{|[x+'\\n'+y]|>`$}" [] (AWK (Just ":") Nothing False) "bench/data/PATH")
+                      , bench "RS" $ nfIO (silence $ runOnFile [] "" "$0" [] (AWK Nothing (Just ":") False) "bench/data/PATH")
+                      , bench "runOnFile" $ nfIO (silence $ runOnFile [] "" "(+)|0 {%/Bloom/}{1}" [] awk "bench/data/ulysses.txt")
+                      , bench "runOnFile/wc.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/wc.jac" ; runOnFile [] "examples/wc.jac" contents [] awk "bench/data/ulysses.txt" })
+                      , bench "runOnFile/span2.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/span2.jac" ; runOnFile [] "examples/span2.jac" contents [] awk "bench/data/span.txt" })
+                      , bench "sedstream.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/sedstream.jac" ; runOnFile [] "examples/sedstream.jac" contents [] awk "bench/data/lines.txt" })
+                      , bench "gnused.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/gnused.jac" ; runOnFile [] "exampes/gnused.jac" contents [] awk "bench/data/lines.txt" })
                       -- , bench "fungnused.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/fungnused.jac" ; runOnFile [] contents (AWK Nothing Nothing) "bench/data/lines.txt" })
-                      , bench "hsLibversionMac.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/hsLibversionMac.jac"; runOnFile [] "examples/hsLibVersionMac.jac" contents [] (AWK Nothing Nothing) "bench/data/pandoc-mac" })
-                      , bench "sedsmtp.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/sedsmtp.jac" ; runOnFile [] "examples/sedsmtp.jac" contents [] (AWK Nothing Nothing) "test/examples/data/2.txt" })
+                      , bench "hsLibversionMac.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/hsLibversionMac.jac"; runOnFile [] "examples/hsLibVersionMac.jac" contents [] awk "bench/data/pandoc-mac" })
+                      , bench "sedsmtp.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/sedsmtp.jac" ; runOnFile [] "examples/sedsmtp.jac" contents [] awk "test/examples/data/2.txt" })
                       ]
                 ]
 

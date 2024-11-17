@@ -10,6 +10,7 @@ import qualified Data.Text            as T
 import qualified Data.Text.IO         as TIO
 import           File
 import           Jacinda.Regex
+import           System.IO            (hClose)
 import           System.IO.Temp       (withSystemTempFile)
 import           Test.Tasty
 import           Test.Tasty.Golden    (goldenVsString)
@@ -24,16 +25,17 @@ harness src m fp o =
     goldenVsString src o $ do
         t <- TIO.readFile src
         withSystemTempFile "JAC_TEST" $ \oϵ h -> do
-            runOnFile [] src t [] m fp h
-            _ <- BS.hGetContents h
+            runOnFile [] src t [] m fp h *> hClose h
             BSL.readFile oϵ
 
 main :: IO ()
 main = defaultMain $
-    testGroup "stream" [
-        harness "examples/otool/rpath.jac" (AWK Nothing Nothing) "test/data/otool" "test/golden/rpath.out"
-      , harness "examples/otool/dllibs.jac" (AWK Nothing Nothing) "test/data/otool" "test/golden/ldlib.out"
-      , harness "test/examples/ghc-filt.jac" (AWK Nothing Nothing) "test/data/ghc" "test/golden/ghc.out"
+    testGroup "ja" [
+        testGroup "stream"
+          [ harness "examples/otool/rpath.jac" awk "test/data/otool" "test/golden/rpath.out"
+          , harness "examples/otool/dllibs.jac" awk "test/data/otool" "test/golden/ldlib.out"
+          , harness "test/examples/ghc-filt.jac" awk "test/data/ghc" "test/golden/ghc.out"
+          ]
       , testGroup "eval"
           [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
           , splitWhitespaceT

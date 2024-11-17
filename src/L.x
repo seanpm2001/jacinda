@@ -151,6 +151,7 @@ tokens :-
         asv                      { mkKw KwAsv }
         usv                      { mkKw KwUsv }
         csv                      { mkKw KwCsv }
+        header                   { mkKw KwHeader }
 
         fs                       { res VarFs }
         rs                       { res VarRs }
@@ -375,7 +376,7 @@ data Keyword = KwLet
              | KwVal
              | KwEnd
              | KwSet
-             | KwFlush
+             | KwFlush | KwHeader
              | KwFn
              | KwInclude
              | KwIf | KwThen | KwElse
@@ -410,6 +411,7 @@ instance Pretty Keyword where
     pretty KwUsv     = "usv"
     pretty KwAsv     = "asv"
     pretty KwCsv     = "csv"
+    pretty KwHeader = "header"
 
 data Builtin = BIParse | BFParse
              | BSubstr

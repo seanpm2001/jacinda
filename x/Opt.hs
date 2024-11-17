@@ -13,10 +13,11 @@ import           Options.Applicative (HasCompleter, Mod, Parser, argument, bashC
 import           Parser              (Value)
 import qualified Paths_jacinda       as P
 import           System.Directory    (doesDirectoryExist)
+import           System.IO           (stdout)
 
 data Cmd = TC !FilePath ![FilePath]
-         | Run !FilePath !(Maybe T.Text) !(Maybe T.Text) !(Maybe FilePath) ![FilePath] ![(T.Text, Value)]
-         | Expr !T.Text !(Maybe FilePath) !(Maybe T.Text) !Bool !Bool !Bool !(Maybe T.Text) ![FilePath]
+         | Run !FilePath !(Maybe T.Text) !(Maybe T.Text) !(Maybe FilePath) ![FilePath] ![(T.Text, Value)] Bool
+         | Expr !T.Text !(Maybe FilePath) !(Maybe T.Text) !Bool !Bool !Bool !(Maybe T.Text) ![FilePath] Bool
          | Eval !T.Text
          | Install
 
@@ -37,7 +38,7 @@ j'File = argument str
     <> help "Source code"
     <> jacCompletions)
 
-csv, asv, usv :: Parser Bool
+begin, csv, asv, usv :: Parser Bool
 csv = switch
     (long "csv"
     <> help "Process as CSV")
@@ -50,6 +51,11 @@ usv = switch
     (long "usv"
     <> short 'u'
     <> help "Process as USV")
+
+begin = switch
+    (long "header"
+    <> short 'b'
+    <> help "Include match in record")
 
 jacRs, jacFs :: Parser (Maybe T.Text)
 jacRs = optional $ option str
@@ -86,8 +92,8 @@ commandP = hsubparser
     <|> exprP
     where
         tcP = TC <$> j'File <*> incls; eP = Eval <$> jacExpr
-        runP = Run <$> j'File <*> jacFs <*> jacRs <*> inpFile <*> incls <*> defVar
-        exprP = Expr <$> jacExpr <*> inpFile <*> jacFs <*> asv <*> usv <*> csv <*> jacRs <*> incls
+        runP = Run <$> j'File <*> jacFs <*> jacRs <*> inpFile <*> incls <*> defVar <*> begin
+        exprP = Expr <$> jacExpr <*> inpFile <*> jacFs <*> asv <*> usv <*> csv <*> jacRs <*> incls <*> begin
 
 incls :: Parser [FilePath]
 incls = many $ strOption
@@ -107,7 +113,7 @@ versionMod = infoOption (V.showVersion P.version) (short 'V' <> long "version" <
 main :: IO ()
 main = run =<< execParser wrapper
 
-ap :: Bool -> Bool -> Bool -> Maybe T.Text -> Maybe T.Text -> Mode
+ap :: Bool -> Bool -> Bool -> Maybe T.Text -> Maybe T.Text -> Bool -> Mode
 ap True True _ _ _          = errorWithoutStackTrace "--asv and --usv both specified."
 ap True _ True _ _          = errorWithoutStackTrace "--asv and --csv both specified."
 ap _ True True _ _          = errorWithoutStackTrace "--usv and --csv both specified."
@@ -117,23 +123,23 @@ ap True _ _ Just{} _        = errorWithoutStackTrace "--asv and field separator 
 ap True _ _ _ Just{}        = errorWithoutStackTrace "--asv and record separator both speficied."
 ap _ _ True Just{} _        = errorWithoutStackTrace "--csv and field separator both speficied."
 ap _ _ True _ Just{}        = errorWithoutStackTrace "--csv and record separator both speficied."
-ap _ _ True Nothing Nothing = CSV
+ap _ _ True Nothing Nothing = const CSV
 ap True _ _ Nothing Nothing = AWK (Just "\\x1f") (Just "\\x1e")
 ap _ True _ Nothing Nothing = AWK (Just "␟") (Just "␞")
 ap _ _ _ fs rs              = AWK fs rs
 
 run :: Cmd -> IO ()
-run (TC fp is)                      = tcIO is fp =<< TIO.readFile fp
-run (Run fp fs rs Nothing is vs)    = do { contents <- TIO.readFile fp ; runStdin is fp contents vs (AWK fs rs) }
-run (Run fp fs rs (Just dat) is vs) = do { contents <- TIO.readFile fp ; runOnFile is fp contents vs (AWK fs rs) dat }
-run (Expr eb f fs a u c rs is)      =
+run (TC fp is)                         = tcIO is fp =<< TIO.readFile fp
+run (Run fp fs rs Nothing is vs h)    = do { contents <- TIO.readFile fp ; runStdin is fp contents vs (AWK fs rs h) }
+run (Run fp fs rs (Just dat) is vs h) = do { contents <- TIO.readFile fp ; runOnFile is fp contents vs (AWK fs rs h) dat stdout }
+run (Expr eb f fs a u c rs is h)      =
     case f of
-        Nothing -> runStdin is "(no file info)" eb [] m
-        Just fp -> runOnFile is "(no file info)" eb [] m fp
+        Nothing -> runStdin is "(no file info)" eb [] (m h)
+        Just fp -> runOnFile is "(no file info)" eb [] (m h) fp stdout
   where
     m = ap a u c fs rs
-run (Eval e)                         = print (exprEval e)
-run Install                          = putStrLn =<< getDataDir
+run (Eval e)                          = print (exprEval e)
+run Install                           = putStrLn =<< getDataDir
 
 getDataDir = do
     cabal <- P.getDataDir

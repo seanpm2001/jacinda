@@ -157,11 +157,12 @@ runOnBytes incls fp fn src vars mode contents h = do
     let (e', k) = runState (eta eI) j
         cont=run h (flushD typed) k (compileR (encodeUtf8 $ T.pack fp) e')
     case (mode, getS ast) of
-        (AWK cliFS cliRS, AWK afs ars) ->
+        (AWK cliFS cliRS cliH, AWK afs ars ah) ->
             let r=compileFS (cliFS <|> afs)
-                bs=case cliRS <|> ars of
-                    Nothing -> fmap BSL.toStrict (ASCIIL.lines contents)
-                    Just rs -> lazySplit (tcompile rs) contents
+                bs=case (cliRS <|> ars, cliH||ah) of
+                    (Nothing, _)     -> fmap BSL.toStrict (ASCIIL.lines contents)
+                    (Just rs, False) -> lazySplit (tcompile rs) contents
+                    (Just rs, True)  -> lazySplitH (tcompile rs) contents
                 ctxs=zipWith (\ ~(x,y) z -> (x,y,z)) [(b, splitBy r b) | b <- bs] [1..]
             in cont ctxs
         (CSV, _) -> let ctxs = csvCtx contents in cont ctxs
@@ -181,7 +182,7 @@ runOnFile :: [FilePath]
           -> [(T.Text, Value)]
           -> Mode
           -> FilePath
-          -> Handle
+          -> Handle -- ^ May need to be closed (lazy bytestring I/O)
           -> IO ()
 runOnFile is fn e vs m fp h = do {b <- BSL.readFile fp; runOnBytes is fp fn e vs m b h}
 
