@@ -3,20 +3,19 @@
 module Main (main) where
 
 import           A
-import qualified Data.ByteString         as BS
-import           Data.Foldable           (toList)
-import           Data.Functor            (void)
-import qualified Data.Text               as T
-import qualified Data.Text.IO            as TIO
-import qualified Data.Text.Lazy          as TL
-import           Data.Text.Lazy.Encoding (encodeUtf8)
+import qualified Data.ByteString      as BS
+import qualified Data.ByteString.Lazy as BSL
+import           Data.Foldable        (toList)
+import           Data.Functor         (void)
+import qualified Data.Text            as T
+import qualified Data.Text.IO         as TIO
 import           File
 import           Jacinda.Regex
 import           Parser
 import           Parser.Rw
-import           System.IO.Silently      (capture_)
+import           System.IO.Temp       (withSystemTempFile)
 import           Test.Tasty
-import           Test.Tasty.Golden       (goldenVsString)
+import           Test.Tasty.Golden    (goldenVsString)
 import           Test.Tasty.HUnit
 
 harness :: String -- ^ Source file name
@@ -27,15 +26,18 @@ harness :: String -- ^ Source file name
 harness src m fp o =
     goldenVsString src o $ do
         t <- TIO.readFile src
-        encodeUtf8 . TL.pack <$> capture_ (runOnFile [] src t [] m fp)
+        withSystemTempFile "JAC_TEST" $ \oϵ h -> do
+            runOnFile [] src t [] m fp h
+            _ <- BS.hGetContents h
+            BSL.readFile oϵ
 
 main :: IO ()
 main = defaultMain $
-    sequentialTestGroup "stream" AllFinish [
+    testGroup "stream" [
         harness "examples/otool/rpath.jac" (AWK Nothing Nothing) "test/data/otool" "test/golden/rpath.out"
       , harness "examples/otool/dllibs.jac" (AWK Nothing Nothing) "test/data/otool" "test/golden/ldlib.out"
       , harness "test/examples/ghc-filt.jac" (AWK Nothing Nothing) "test/data/ghc" "test/golden/ghc.out"
-      , testGroup "Jacinda interpreter"
+      , testGroup "eval"
           [ testCase "parse as" (parseTo sumBytes sumBytesAST)
           , splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
           , splitWhitespaceT

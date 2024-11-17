@@ -141,10 +141,10 @@ test-suite jacinda-test
         base,
         jacinda-lib,
         bytestring,
-        silently,
         tasty,
         tasty-golden,
         tasty-hunit,
+        temporary,
         text
 
 benchmark jacinda-bench

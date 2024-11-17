@@ -28,9 +28,9 @@ import           Jacinda.Regex
 import           Nm
 import           NumParse
 import           Prettyprinter                     (hardline, pretty)
-import           Prettyprinter.Render.Text         (putDoc)
+import           Prettyprinter.Render.Text         (hPutDoc)
 import           Regex.Rure                        (RureMatch (RureMatch), RurePtr)
-import           System.IO                         (hFlush, stdout)
+import           System.IO                         (Handle, hFlush)
 import           Ty.Const
 import           U
 
@@ -86,31 +86,31 @@ nI = state (\i -> (i, i+1))
 nN :: T -> UM (Nm T)
 nN t = do {u <- nI; pure (Nm "fold_hole" (U u) t)}
 
-pSF :: Bool -> (Maybe Tmp, [Tmp]) -> [Env] -> IO ()
-pSF flush (Just t, tt) [e] = do
-    traverse_ (traverse_ (pS flush).(e !)) tt
-    traverse_ (pS flush) (e!t)
-pSF flush c@(_, tt) (e:es) = do
-    traverse_ (traverse_ (pS flush)) [e!t|t <- tt]
-    pSF flush c es
-pSF _ _ [] = pure ()
+pSF :: Handle -> Bool -> (Maybe Tmp, [Tmp]) -> [Env] -> IO ()
+pSF h flush (Just t, tt) [e] = do
+    traverse_ (traverse_ (pS h flush).(e !)) tt
+    traverse_ (pS h flush) (e!t)
+pSF h flush c@(_, tt) (e:es) = do
+    traverse_ (traverse_ (pS h flush)) [e!t|t <- tt]
+    pSF h flush c es
+pSF _ _ _ [] = pure ()
 
-uStream j = flip evalState j
+uStream = flip evalState
 
-run :: Bool -> Int -> E T -> [LineCtx] -> IO ()
-run _ _ e _ | ty@TyArr{} <- eLoc e = error ("Found function type: " ++ show ty)
-run flush j e ctxs | TyB TyUnit <- eLoc e =  (\(s, f, env) -> pSF flush (s,f) env) $ uStream j $ do
+run :: Handle -> Bool -> Int -> E T -> [LineCtx] -> IO ()
+run _ _ _ e _ | ty@TyArr{} <- eLoc e = error ("Found function type: " ++ show ty)
+run h flush j e ctxs | TyB TyUnit <- eLoc e =  (\(s, f, env) -> pSF h flush (s,f) env) $ uStream j $ do
     (res, tt, iEnv, μ) <- unit e
     u <- nI
     let outs=μ<$>ctxs; es'=scanl' (&) (Σ u iEnv IM.empty IM.empty IM.empty IS.empty) outs
     pure (res, tt, gE<$>es')
-run flush j e ctxs | TyB TyStream:$_ <- eLoc e = traverse_ (traverse_ (pS flush)).uStream j $ do
+run h flush j e ctxs | TyB TyStream:$_ <- eLoc e = traverse_ (traverse_ (pS h flush)).uStream j $ do
     t <- nI
     (iEnv, μ) <- ctx e t
     u <- nI
     let outs=μ<$>ctxs; es={-# SCC "scanMain" #-} scanl' (&) (Σ u iEnv IM.empty IM.empty IM.empty IS.empty) outs
     pure ((! t).gE<$>es)
-run _ j e ctxs = pDocLn $ uStream j $ do
+run h _ j e ctxs = pDocLn h $ uStream j $ do
     (iEnv, g, e0) <- collect e
     u <- nI
     let updates=g<$>ctxs
@@ -130,11 +130,11 @@ unit (EApp _ (EApp _ (BB _ Report) es) e) = do
     pure (Just r, [t], iEnv<>rEnv, μ@.g)
 unit e = error ("Internal error. '" ++ show e ++ "' assigned unit type?")
 
-pS p = if p then (*>fflush).pDocLn else pDocLn where fflush = hFlush stdout
+pS h p e = if p then pDocLn h e *> hFlush h else pDocLn h e
 
-pDocLn :: E T -> IO ()
-pDocLn (Lit _ (FLit f)) = hPutBuilder stdout (doubleDec f <> "\n")
-pDocLn e                = putDoc (pretty e <> hardline)
+pDocLn :: Handle -> E T -> IO ()
+pDocLn h (Lit _ (FLit f)) = hPutBuilder h (doubleDec f <> "\n")
+pDocLn h e                = hPutDoc h (pretty e <> hardline)
 
 collect :: E T -> UM (Env, LineCtx -> Σ -> Σ, E T)
 collect e@(EApp ty (EApp _ (EApp _ (TB _ Fold) _) _) _) = do

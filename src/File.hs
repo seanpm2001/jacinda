@@ -32,7 +32,7 @@ import           Parser.Rw
 import           Prettyprinter                    (Pretty (pretty))
 import           R
 import           Regex.Rure                       (RurePtr)
-import           System.IO                        (stdin)
+import           System.IO                        (Handle, stdin, stdout)
 import           Text.CSV.Lazy.ByteString         (CSVField (..), parseCSV)
 import           Ty
 
@@ -146,15 +146,16 @@ runOnBytes :: [FilePath]
            -> [(T.Text, Value)]
            -> Mode
            -> BSL.ByteString
+           -> Handle -- ^ Out handle
            -> IO ()
-runOnBytes incls fp fn src vars mode contents = do
+runOnBytes incls fp fn src vars mode contents h = do
     incls' <- defaultIncludes <*> pure incls
     (ast, m) <- parsePWithMax incls' fn src vars
     (typed, i) <- yIO fn $ runTyM m (tyP ast)
     let (eI, j) = ib i typed
     m'Throw $ cF eI
     let (e', k) = runState (eta eI) j
-        cont=run (flushD typed) k (compileR (encodeUtf8 $ T.pack fp) e')
+        cont=run h (flushD typed) k (compileR (encodeUtf8 $ T.pack fp) e')
     case (mode, getS ast) of
         (AWK cliFS cliRS, AWK afs ars) ->
             let r=compileFS (cliFS <|> afs)
@@ -172,7 +173,7 @@ runStdin :: [FilePath]
          -> [(T.Text, Value)]
          -> Mode
          -> IO ()
-runStdin is src fn vars m = runOnBytes is "(stdin)" src fn vars m =<< BSL.hGetContents stdin
+runStdin is src fn vars m = do {b <- BSL.hGetContents stdin; runOnBytes is "(stdin)" src fn vars m b stdout}
 
 runOnFile :: [FilePath]
           -> FilePath
@@ -180,8 +181,9 @@ runOnFile :: [FilePath]
           -> [(T.Text, Value)]
           -> Mode
           -> FilePath
+          -> Handle
           -> IO ()
-runOnFile is fn e vs m fp = runOnBytes is fp fn e vs m =<< BSL.readFile fp
+runOnFile is fn e vs m fp h = do {b <- BSL.readFile fp; runOnBytes is fp fn e vs m b h}
 
 tcIO :: [FilePath] -> FilePath -> T.Text -> IO ()
 tcIO incls fn src = do
