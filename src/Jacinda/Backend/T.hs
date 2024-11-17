@@ -123,8 +123,7 @@ unit (Anchor _ es) = do
     (iEnvs, μs) <- unzip <$> zipWithM ctx es tt
     pure (Nothing, tt, fold iEnvs, ts μs)
 unit (EApp _ (EApp _ (BB _ Report) es) e) = do
-    r <- nI
-    t <- nI
+    t <- nI; r <- nI
     (iEnv, μ) <- ctx es t
     (rEnv, g) <- φ e r
     pure (Just r, [t], iEnv<>rEnv, μ@.g)
