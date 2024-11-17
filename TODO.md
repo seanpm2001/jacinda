@@ -22,10 +22,13 @@
 - [x] unicode/apl for floor+ceiling
 - [x] ⍬
 # Features
+- [x] keep `rs`?
 - [ ] set variables on the command-line?
   - [ ] `fd` has `{}`, `{/}`, etc. so one could use it to pass in filenames
     while invoking...
 - [ ] named columns (e.g. ``Ndx` for output of `readelf -Ws`)
+  - [ ] a bunch of records in Unix are blocks-of-record-of... (split on header,
+    then find field, then sep by space to get value)
 - [ ] scan1
 - [ ] "mod"
 - [ ] `$>` operator like awk's `END`, allow stream to print and then present
@@ -75,11 +78,12 @@
   - [ ] OFS
   - [ ] ORS
 ## Instances
-- [ ] `Ord` instance for option? (and lists)
+- [ ] `Ord` instance for option?
 ## Syntax
 - [ ] `$$` synonym for newline?
 - [ ] `.[ ... ]` dfn where you specify that it's binary?
 - [x] `?` for if... then?
+- [ ] infix foldMap
 - [ ] lineLength := (#")
 - [ ] `{\<pat>}. $0` ... filter on stream expressions
   - [x] or #: maybe?
