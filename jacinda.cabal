@@ -30,6 +30,7 @@ extra-source-files:
     test/golden/*.out
     test/data/otool
     test/data/ghc
+    test/data/cabal-info
 
 source-repository head
     type:     git
