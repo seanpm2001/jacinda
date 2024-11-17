@@ -29,11 +29,12 @@ extra-source-files:
     examples/*.jac
     examples/otool/*.jac
     test/golden/*.out
-    test/data/otool
-    test/data/ghc
     test/data/cabal-info
-    test/data/url
+    test/data/ghc
+    test/data/ls
+    test/data/otool
     test/data/python-site
+    test/data/url
 
 source-repository head
     type:     git
