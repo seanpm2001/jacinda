@@ -39,6 +39,9 @@ Record separator regex
 \f[B]\-\-csv\f[R]
 Process as CSV
 .TP
+\f[B]\-b\f[R] \f[B]\-\-header\f[R]
+Include match when splitting records
+.TP
 \f[B]\-Dfile=main.c\f[R]
 Define variable
 .SH LANGUAGE
@@ -236,6 +239,8 @@ else
 \f[B]:set fs=/REGEX/;\f[R] Set field separator
 .PP
 \f[B]:set rs=/REGEX/;\f[R] Set record separator
+.PP
+\f[B]:set header;\f[R] Include match when splitting records
 .PP
 \f[B]:set csv;\f[R] Process as CSV
 .PP

@@ -47,6 +47,9 @@ ja - Jacinda: data filtering, processing, reporting
 **-\-csv**
 :   Process as CSV
 
+**-b** **-\-header**
+:   Include match when splitting records
+
 **-Dfile=main.c**
 :   Define variable
 
@@ -242,6 +245,8 @@ a boolean expression.
 **:set fs=/REGEX/;** Set field separator
 
 **:set rs=/REGEX/;** Set record separator
+
+**:set header;** Include match when splitting records
 
 **:set csv;** Process as CSV
 
