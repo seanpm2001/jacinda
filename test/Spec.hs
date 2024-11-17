@@ -16,17 +16,25 @@ import           Test.Tasty
 import           Test.Tasty.Golden    (goldenVsString)
 import           Test.Tasty.HUnit
 
-harness :: String -- ^ Source file name
+eio :: FilePath -- ^ Source filename
+    -> T.Text
+    -> Mode
+    -> FilePath -- ^ Input
+    -> IO BSL.ByteString
+eio src e m fp =
+    withSystemTempFile "JAC_TEST" $ \oϵ h -> do
+        runOnFile [] src e [] m fp h *> hClose h
+        BSL.readFile oϵ
+
+harnessF e m fp o = goldenVsString (T.unpack e) o $ eio undefined e m fp
+
+harness :: FilePath -- ^ Source file
         -> Mode
-        -> FilePath -- ^ Input
-        -> FilePath -- ^ Golden output
+        -> FilePath -- ^ Input file
+        -> FilePath -- ^ Expected output
         -> TestTree
 harness src m fp o =
-    goldenVsString src o $ do
-        t <- TIO.readFile src
-        withSystemTempFile "JAC_TEST" $ \oϵ h -> do
-            runOnFile [] src t [] m fp h *> hClose h
-            BSL.readFile oϵ
+    goldenVsString src o $ do {t <- TIO.readFile src; eio src t m fp}
 
 main :: IO ()
 main = defaultMain $
@@ -35,6 +43,8 @@ main = defaultMain $
           [ harness "examples/otool/rpath.jac" awk "test/data/otool" "test/golden/rpath.out"
           , harness "examples/otool/dllibs.jac" awk "test/data/otool" "test/golden/ldlib.out"
           , harness "test/examples/ghc-filt.jac" awk "test/data/ghc" "test/golden/ghc.out"
+          , harness "examples/latestCabal.jac" awk "test/data/cabal-info" "test/golden/cabal-info.out"
+          , harnessF ".?{|`1 ~* 1 /([^\\?]*)/}" awk "test/data/url" "test/golden/url.out"
           ]
       , testGroup "eval"
           [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
