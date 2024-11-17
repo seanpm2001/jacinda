@@ -46,6 +46,7 @@ main = defaultMain $
           , harness "examples/latestCabal.jac" awk "test/data/cabal-info" "test/golden/cabal-info.out"
           , harnessF ".?{|`1 ~* 1 /([^\\?]*)/}" awk "test/data/url" "test/golden/url.out"
           , harnessF "[x+' '+y]|>(sprintf'-L%s')¨.?{|`1 ~* 1 /([^']*site-packages)/}" awk "test/data/python-site" "test/golden/linker-flags.out"
+          , harnessF "{%/hs-source-dirs/}{`2}" (AWK (Just "\\s*:\\s*") Nothing False) "jacinda.cabal" "test/golden/src-dirs.out"
           ]
       , testGroup "eval"
           [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
