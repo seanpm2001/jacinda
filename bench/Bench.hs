@@ -3,11 +3,15 @@
 module Main (main) where
 
 import           A
-import           Control.DeepSeq    (NFData (..))
+import           Control.DeepSeq (NFData (..))
 import           Criterion.Main
-import qualified Data.Text.IO       as TIO
+import qualified Data.Text.IO    as TIO
 import           File
-import           System.IO.Silently (silence)
+import           System.IO       (IOMode (WriteMode), withFile)
+
+hrun ifp e m fp = withFile "/dev/null" WriteMode $ \h -> runOnFile [] "(bench)" e [] m fp h
+runs e m fp = nfIO $ hrun "(bench)" e m fp
+fruns ifp m fp = nfIO $ do { contents <- TIO.readFile ifp; hrun ifp contents m fp }
 
 main :: IO ()
 main =
@@ -16,21 +20,21 @@ main =
                       , bench "exprEval" $ nf exprEval "reintercalate ' ' (split '01-23-1987' /-/)"
                       ]
                 , bgroup "csv"
-                      [ bench "dedup" $ nfIO (silence $ runOnFile [] "" "~.{ix>1}{`8}" [] CSV "bench/data/food-prices.csv")
-                      , bench "succdiff" $ nfIO (silence $ runOnFile [] "" "(%)\\. {%/Apple/}{`3:}" [] CSV "bench/data/food-prices.csv")
+                      [ bench "dedup" $ runs "~.{ix>1}{`8}" CSV "bench/data/food-prices.csv"
+                      , bench "succdiff" $ runs "(%)\\. {%/Apple/}{`3:}" CSV "bench/data/food-prices.csv"
                       ]
                 , bgroup "stream"
-                      [ bench "sprintf" $ nfIO (silence $ runOnFile [] "" "{%/infix(r|l)?\\s+\\d+/}{sprintf '- fixity: %s' `0}" [] awk "src/A.hs")
-                      , bench "path" $ nfIO (silence $ runOnFile [] "" "{|[x+'\\n'+y]|>`$}" [] (AWK (Just ":") Nothing False) "bench/data/PATH")
-                      , bench "RS" $ nfIO (silence $ runOnFile [] "" "$0" [] (AWK Nothing (Just ":") False) "bench/data/PATH")
-                      , bench "runOnFile" $ nfIO (silence $ runOnFile [] "" "(+)|0 {%/Bloom/}{1}" [] awk "bench/data/ulysses.txt")
-                      , bench "runOnFile/wc.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/wc.jac" ; runOnFile [] "examples/wc.jac" contents [] awk "bench/data/ulysses.txt" })
-                      , bench "runOnFile/span2.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/span2.jac" ; runOnFile [] "examples/span2.jac" contents [] awk "bench/data/span.txt" })
-                      , bench "sedstream.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/sedstream.jac" ; runOnFile [] "examples/sedstream.jac" contents [] awk "bench/data/lines.txt" })
-                      , bench "gnused.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/gnused.jac" ; runOnFile [] "exampes/gnused.jac" contents [] awk "bench/data/lines.txt" })
-                      -- , bench "fungnused.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/fungnused.jac" ; runOnFile [] contents (AWK Nothing Nothing) "bench/data/lines.txt" })
-                      , bench "hsLibversionMac.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/hsLibversionMac.jac"; runOnFile [] "examples/hsLibVersionMac.jac" contents [] awk "bench/data/pandoc-mac" })
-                      , bench "sedsmtp.jac" $ nfIO (silence $ do { contents <- TIO.readFile "examples/sedsmtp.jac" ; runOnFile [] "examples/sedsmtp.jac" contents [] awk "test/examples/data/2.txt" })
+                      [ bench "sprintf" $ runs "{%/infix(r|l)?\\s+\\d+/}{sprintf '- fixity: %s' `0}" awk "src/A.hs"
+                      , bench "path" $ runs "{|[x+'\\n'+y]|>`$}" (AWK (Just ":") Nothing False) "bench/data/PATH"
+                      , bench "RS" $ runs "$0" (AWK Nothing (Just ":") False) "bench/data/PATH"
+                      , bench "runOnFile" $ runs "(+)|0 {%/Bloom/}{1}" awk "bench/data/ulysses.txt"
+                      , bench "runOnFile/wc.jac" $ fruns "examples/wc.jac" awk "bench/data/ulysses.txt"
+                      , bench "runOnFile/span2.jac" $ fruns "examples/span2.jac" awk "bench/data/span.txt"
+                      , bench "sedstream.jac" $ fruns "examples/sedstream.jac" awk "bench/data/lines.txt"
+                      , bench "gnused.jac" $ fruns "examples/gnused.jac" awk "bench/data/lines.txt"
+                      -- , bench "fungnused.jac" $ fruns "examples/fungnused.jac" awk "bench/data/lines.txt" }
+                      , bench "hsLibversionMac.jac" $ fruns "examples/hsLibversionMac.jac" awk "bench/data/pandoc-mac"
+                      , bench "sedsmtp.jac" $ fruns "examples/sedsmtp.jac" awk "test/examples/data/2.txt"
                       ]
                 ]
 
