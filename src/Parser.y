@@ -1,6 +1,5 @@
 {
-    module Parser ( parse
-                  , parseWithMax
+    module Parser ( parseWithMax
                   , parseWithCtx
                   , parseLibWithCtx
                   , ParseError (..)
@@ -415,9 +414,6 @@ guess l v = case snd<$>runParse pValue v of
 
 df :: T.Text -> Value -> Alex (E AlexPosn -> E AlexPosn)
 df t x = do {nm <- newVarAlex t; let l=Nm.loc nm in pure (Let l (nm, guess l x))}
-
-parse :: T.Text -> Either (ParseError AlexPosn) File
-parse = fmap snd . runParse parseF
 
 parseWithMax :: T.Text -> Either (ParseError AlexPosn) (Int, File)
 parseWithMax = fmap (first fst3) . runParse parseF

@@ -1,4 +1,4 @@
-module File ( tcIO, tySrc
+module File ( tcIO
             , runStdin, runOnFile
             , exprEval
             ) where
@@ -193,12 +193,6 @@ tcIO incls fn src = do
     (pT, i) <- yIO fn $ runTyM m (tyP ast)
     let (eI, _) = ib i pT
     m'Throw $ cF eI
-
-tySrc :: T.Text -> T
-tySrc src =
-    case parseWithMax' src of
-        Right (ast, m) -> yeet $ fst <$> runTyM m (tyOf (expr ast))
-        Left err       -> throw err
 
 m'Throw :: Exception e => Maybe e -> IO ()
 m'Throw = traverse_ throwIO

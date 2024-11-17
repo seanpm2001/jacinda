@@ -1,7 +1,6 @@
 module Ty ( Subst
           , runTyM, tyP
           , match, aT
-          , tyOf
           ) where
 
 import           A
@@ -278,9 +277,6 @@ lookupVar n@(Nm _ (U i) l) = do
         Just ty -> pure ty -- liftCloneTy ty
         Nothing -> throwError $ IllScoped l n
 
-tyOf :: Ord a => E a -> TyM a T
-tyOf = fmap eLoc.tyE
-
 tyDS :: Ord a => Subst -> D a -> TyM a (D T, Subst)
 tyDS s (SetFS bs)  = pure (SetFS bs, s)
 tyDS s (SetRS bs)  = pure (SetRS bs, s)
@@ -374,13 +370,6 @@ tyM l = do
 
 desugar :: a
 desugar = error "Internal error: should have been de-sugared in an earlier stage!"
-
-tyE :: Ord a => E a -> TyM a (E T)
-tyE e = do
-    (e', s) <- tyES mempty e
-    cvs <- gets (IM.toList . classVars)
-    traverse_ (uncurry (checkClass s)) cvs
-    pure (fmap (aT s) e')
 
 tyES :: Ord a => Subst -> E a -> TyM a (E T, Subst)
 tyES _ F{}                = error "impossible."
