@@ -1,0 +1,11 @@
+sys.path = [
+    '/Users/vanessa/dev/haskell/jacinda',
+    '/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip',
+    '/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13',
+    '/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload',
+    '/Users/vanessa/Library/Python/3.13/lib/python/site-packages',
+    '/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages',
+]
+USER_BASE: '/Users/vanessa/Library/Python/3.13' (exists)
+USER_SITE: '/Users/vanessa/Library/Python/3.13/lib/python/site-packages' (exists)
+ENABLE_USER_SITE: True

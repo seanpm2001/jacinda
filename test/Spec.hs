@@ -45,6 +45,7 @@ main = defaultMain $
           , harness "test/examples/ghc-filt.jac" awk "test/data/ghc" "test/golden/ghc.out"
           , harness "examples/latestCabal.jac" awk "test/data/cabal-info" "test/golden/cabal-info.out"
           , harnessF ".?{|`1 ~* 1 /([^\\?]*)/}" awk "test/data/url" "test/golden/url.out"
+          , harnessF "[x+' '+y]|>(sprintf'-L%s')¨.?{|`1 ~* 1 /([^']*site-packages)/}" awk "test/data/python-site" "test/golden/linker-flags.out"
           ]
       , testGroup "eval"
           [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]

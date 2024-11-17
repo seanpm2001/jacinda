@@ -32,6 +32,7 @@ extra-source-files:
     test/data/ghc
     test/data/cabal-info
     test/data/url
+    test/data/python-site
 
 source-repository head
     type:     git
