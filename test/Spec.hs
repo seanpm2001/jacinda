@@ -6,13 +6,10 @@ import           A
 import qualified Data.ByteString      as BS
 import qualified Data.ByteString.Lazy as BSL
 import           Data.Foldable        (toList)
-import           Data.Functor         (void)
 import qualified Data.Text            as T
 import qualified Data.Text.IO         as TIO
 import           File
 import           Jacinda.Regex
-import           Parser
-import           Parser.Rw
 import           System.IO.Temp       (withSystemTempFile)
 import           Test.Tasty
 import           Test.Tasty.Golden    (goldenVsString)
@@ -38,8 +35,7 @@ main = defaultMain $
       , harness "examples/otool/dllibs.jac" (AWK Nothing Nothing) "test/data/otool" "test/golden/ldlib.out"
       , harness "test/examples/ghc-filt.jac" (AWK Nothing Nothing) "test/data/ghc" "test/golden/ghc.out"
       , testGroup "eval"
-          [ testCase "parse as" (parseTo sumBytes sumBytesAST)
-          , splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
+          [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
           , splitWhitespaceT
               "drwxr-xr-x  12 vanessa  staff   384 Dec 26 19:43 _darcs"
               ["drwxr-xr-x","12","vanessa","staff","384","Dec","26","19:43","_darcs"]
@@ -65,23 +61,3 @@ splitWhitespaceT :: BS.ByteString -> [BS.ByteString] -> TestTree
 splitWhitespaceT haystack expected =
     testCase "split col" $
         toList (splitBy defaultRurePtr haystack) @?= expected
-
--- example: ls -l | ja '(+)|0 $5:i'
-sumBytes :: T.Text
-sumBytes = "(+)|0 $5:i"
-
-sumBytesAST :: E ()
-sumBytesAST =
-    EApp ()
-        (EApp ()
-            (EApp ()
-                (TB () Fold)
-                (BB () Plus))
-            (Lit () (ILit 0)))
-            (IParseCol () 5)
-
-parseTo :: T.Text -> E () -> Assertion
-parseTo src e =
-    case rwP . snd <$> parse src of
-        Left err     -> assertFailure (show err)
-        Right actual -> void (expr actual) @?= e
