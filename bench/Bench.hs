@@ -23,6 +23,8 @@ main =
                       [ bench "dedup" $ runs "~.{ix>1}{`8}" CSV "bench/data/food-prices.csv"
                       , bench "succdiff" $ runs "(%)\\. {%/Apple/}{`3:}" CSV "bench/data/food-prices.csv"
                       ]
+                , bgroup "report"
+                      [ bench "ghc-filt" $ fruns "test/examples/ghc-filt.jac" awk "test/data/ghc" ]
                 , bgroup "stream"
                       [ bench "sprintf" $ runs "{%/infix(r|l)?\\s+\\d+/}{sprintf '- fixity: %s' `0}" awk "src/A.hs"
                       , bench "path" $ runs "{|[x+'\\n'+y]|>`$}" (AWK (Just ":") Nothing False) "bench/data/PATH"
