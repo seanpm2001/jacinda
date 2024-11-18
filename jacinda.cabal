@@ -32,6 +32,7 @@ extra-source-files:
     test/data/a.csv
     test/data/cabal-info
     test/data/cdeps
+    test/data/download.html
     test/data/ghc
     test/data/ghc-pkg
     test/data/git-tags

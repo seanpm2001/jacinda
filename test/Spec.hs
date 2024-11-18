@@ -72,6 +72,7 @@ main = defaultMain $
           , ep ".?{ix=1}{`0 ~* 1 /(\\d+\\.\\d+)/}" awk "test/data/r-version" "4.4"
           , harnessF "{ix=1}{[x+'\\n'+y]|>`$}" CSV "test/data/a.csv" "test/golden/csv-col.out"
           , harnessF "[x+' '+y]|> ~.$0" awk "test/data/cdeps" "test/golden/mk-depends.out"
+          , ep "[:|>.?{|`0 ~* 1 /less-(\\d+)\\.tar\\.gz/}" awk "test/data/download.html" "668"
           ]
       , testGroup "eval"
           [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
