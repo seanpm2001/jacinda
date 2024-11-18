@@ -29,6 +29,7 @@ extra-source-files:
     examples/*.jac
     examples/otool/*.jac
     test/golden/*.out
+    test/data/a.csv
     test/data/cabal-info
     test/data/ghc
     test/data/ghc-pkg

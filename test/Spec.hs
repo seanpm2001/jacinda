@@ -62,6 +62,7 @@ main = defaultMain $
                 "test/data/python-site"
                 "-L/Users/vanessa/Library/Python/3.13/lib/python/site-packages -L/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages"
           , harnessF "{%/hs-source-dirs/}{`2}" (AWK (Just "\\s*:\\s*") Nothing False) "jacinda.cabal" "test/golden/src-dirs.out"
+          -- , harnessF "[x+' '+y]|>$0" (AWK Nothing (Just "\\n\\s*") False) "vscode/syntaxes/jacinda.tmLanguage.json" "test/golden/minify.out"
           , ep "@include'lib/prefixSizes.jac' prettyMem((+)|0.0 {ix>1}{`5:})" awk "test/data/ls" "73.82 kB"
           , ep "[y]|>{%/tags/}{`*}" (AWK (Just "/") Nothing False) "test/data/git-tags" "v1.7.4"
           , harnessF ".?{%/clang|mold|gold|GCC|GHC|rustc/}{`0 ~* 1 /^\\s*\\[[\\sa-f0-9]*\\]\\s*(.*$)/}" awk "test/data/readelf" "test/golden/compiler-version.out"
@@ -69,6 +70,7 @@ main = defaultMain $
           , ep ".?{|`2 ~* 1 /(\\d+\\.\\d+)\\.\\d+/}" awk "test/data/py-ver" "3.13"
           , ep "{ix=1}{`2}" awk "test/data/ghc-pkg" "/Users/vanessa/.ghcup/ghc/9.10.1/lib/ghc-9.10.1/lib/../lib/aarch64-osx-ghc-9.10.1"
           , ep ".?{ix=1}{`0 ~* 1 /(\\d+\\.\\d+)/}" awk "test/data/r-version" "4.4"
+          , harnessF "{ix=1}{[x+'\\n'+y]|>`$}" CSV "test/data/a.csv" "test/golden/csv-col.out"
           ]
       , testGroup "eval"
           [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
