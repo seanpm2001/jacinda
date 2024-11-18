@@ -49,6 +49,8 @@ main = defaultMain $
           , harnessF "{%/hs-source-dirs/}{`2}" (AWK (Just "\\s*:\\s*") Nothing False) "jacinda.cabal" "test/golden/src-dirs.out"
           , harnessF "@include'lib/prefixSizes.jac' prettyMem((+)|0.0 {ix>1}{`5:})" awk "test/data/ls" "test/golden/ls.out"
           , harnessF "[y]|>{%/tags/}{`*}" (AWK (Just "/") Nothing False) "test/data/git-tags" "test/golden/git.out"
+          , harnessF ".?{%/clang|mold|gold|GCC|GHC|rustc/}{`0 ~* 1 /^\\s*\\[[\\sa-f0-9]*\\]\\s*(.*$)/}" awk "test/data/readelf" "test/golden/compiler-version.out"
+          , harnessF "~.{%/LANGUAGE\\s*.*\\s*#-/}{`3}" awk "src/Jacinda/Regex.hs" "test/golden/extensions.out"
           ]
       , testGroup "eval"
           [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]

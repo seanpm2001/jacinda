@@ -1,0 +1,10 @@
+String dump of section '.comment':
+  [     1]  GCC: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+  [    2c]  GHC 9.8.2
+  [    36]  GCC: (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+  [    61]  rustc version 1.76.0 (07dca489a 2024-02-04)
+  [    8d]  GCC: (Ubuntu 12.3.0-1ubuntu1~22.04) 12.3.0
+
+String dump of section '.note.gnu.gold-version':
+  [     c]  GNU
+  [    10]  gold 1.16
