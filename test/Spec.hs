@@ -26,6 +26,15 @@ eio src e m fp =
         runOnFile [] src e [] m fp h *> hClose h
         BSL.readFile oϵ
 
+ep :: T.Text
+   -> Mode
+   -> FilePath -- ^ Input
+   -> BSL.ByteString -- ^ Expected output
+   -> TestTree
+ep e m fp expected = testCase (T.unpack e) $ do
+    actual <- eio undefined e m fp
+    actual @?= expected <> "\n"
+
 harnessF e m fp o = goldenVsString (T.unpack e) o $ eio undefined e m fp
 
 harness :: FilePath -- ^ Source file
@@ -43,14 +52,17 @@ main = defaultMain $
           [ harness "examples/otool/rpath.jac" awk "test/data/otool" "test/golden/rpath.out"
           , harness "examples/otool/dllibs.jac" awk "test/data/otool" "test/golden/ldlib.out"
           , harness "test/examples/ghc-filt.jac" awk "test/data/ghc" "test/golden/ghc.out"
-          , harness "examples/latestCabal.jac" awk "test/data/cabal-info" "test/golden/cabal-info.out"
-          , harnessF ".?{|`1 ~* 1 /([^\\?]*)/}" awk "test/data/url" "test/golden/url.out"
+          , ep "[x ~* 1 /(\\d+(\\.\\d+)*)/]:?{%/Versions available:/}{[y]|>`$}"
+                (AWK (Just "\\s*,\\s*") (Just "\\n[^:\\n]*:") True)
+                "test/data/cabal-info"
+                "0.1.0.5"
+          , ep ".?{|`1 ~* 1 /([^\\?]*)/}" awk "test/data/url" "https://soundcloud.com/shitzulover07/ayesha-erotica-vacation-bible-school"
           , harnessF "[x+' '+y]|>(sprintf'-L%s')¨.?{|`1 ~* 1 /([^']*site-packages)/}" awk "test/data/python-site" "test/golden/linker-flags.out"
           , harnessF "{%/hs-source-dirs/}{`2}" (AWK (Just "\\s*:\\s*") Nothing False) "jacinda.cabal" "test/golden/src-dirs.out"
-          , harnessF "@include'lib/prefixSizes.jac' prettyMem((+)|0.0 {ix>1}{`5:})" awk "test/data/ls" "test/golden/ls.out"
-          , harnessF "[y]|>{%/tags/}{`*}" (AWK (Just "/") Nothing False) "test/data/git-tags" "test/golden/git.out"
+          , harnessF "@include'lib/prefixSizes.jac' prettyMem((+)|0.0 {ix>1}{`5:})" awk "test/data/ls" "73.82 kB"
+          , ep "[y]|>{%/tags/}{`*}" (AWK (Just "/") Nothing False) "test/data/git-tags" "v1.7.4"
           , harnessF ".?{%/clang|mold|gold|GCC|GHC|rustc/}{`0 ~* 1 /^\\s*\\[[\\sa-f0-9]*\\]\\s*(.*$)/}" awk "test/data/readelf" "test/golden/compiler-version.out"
-          , harnessF "~.{%/LANGUAGE\\s*.*\\s*#-/}{`3}" awk "src/Jacinda/Regex.hs" "test/golden/extensions.out"
+          , ep "~.{%/LANGUAGE\\s*.*\\s*#-/}{`3}" awk "src/Jacinda/Regex.hs" "OverloadedLists"
           ]
       , testGroup "eval"
           [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
