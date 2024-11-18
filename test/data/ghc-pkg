@@ -1,0 +1,2 @@
+dynamic-library-dirs: /Users/vanessa/.ghcup/ghc/9.10.1/lib/ghc-9.10.1/lib/../lib/aarch64-osx-ghc-9.10.1
+                      /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib

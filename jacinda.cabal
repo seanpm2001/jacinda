@@ -31,10 +31,13 @@ extra-source-files:
     test/golden/*.out
     test/data/cabal-info
     test/data/ghc
+    test/data/ghc-pkg
     test/data/git-tags
     test/data/ls
     test/data/otool
+    test/data/py-ver
     test/data/python-site
+    test/data/r-version
     test/data/readelf
     test/data/url
 

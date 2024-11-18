@@ -57,12 +57,18 @@ main = defaultMain $
                 "test/data/cabal-info"
                 "0.1.0.5"
           , ep ".?{|`1 ~* 1 /([^\\?]*)/}" awk "test/data/url" "https://soundcloud.com/shitzulover07/ayesha-erotica-vacation-bible-school"
-          , harnessF "[x+' '+y]|>(sprintf'-L%s')¨.?{|`1 ~* 1 /([^']*site-packages)/}" awk "test/data/python-site" "test/golden/linker-flags.out"
+          , ep "[x+' '+y]|>(sprintf'-L%s')¨.?{|`1 ~* 1 /([^']*site-packages)/}"
+                awk
+                "test/data/python-site"
+                "-L/Users/vanessa/Library/Python/3.13/lib/python/site-packages -L/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages"
           , harnessF "{%/hs-source-dirs/}{`2}" (AWK (Just "\\s*:\\s*") Nothing False) "jacinda.cabal" "test/golden/src-dirs.out"
           , ep "@include'lib/prefixSizes.jac' prettyMem((+)|0.0 {ix>1}{`5:})" awk "test/data/ls" "73.82 kB"
           , ep "[y]|>{%/tags/}{`*}" (AWK (Just "/") Nothing False) "test/data/git-tags" "v1.7.4"
           , harnessF ".?{%/clang|mold|gold|GCC|GHC|rustc/}{`0 ~* 1 /^\\s*\\[[\\sa-f0-9]*\\]\\s*(.*$)/}" awk "test/data/readelf" "test/golden/compiler-version.out"
           , ep "~.{%/LANGUAGE\\s*.*\\s*#-/}{`3}" awk "src/Jacinda/Regex.hs" "OverloadedLists"
+          , ep ".?{|`2 ~* 1 /(\\d+\\.\\d+)\\.\\d+/}" awk "test/data/py-ver" "3.13"
+          , ep "{ix=1}{`2}" awk "test/data/ghc-pkg" "/Users/vanessa/.ghcup/ghc/9.10.1/lib/ghc-9.10.1/lib/../lib/aarch64-osx-ghc-9.10.1"
+          , ep ".?{ix=1}{`0 ~* 1 /(\\d+\\.\\d+)/}" awk "test/data/r-version" "4.4"
           ]
       , testGroup "eval"
           [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
