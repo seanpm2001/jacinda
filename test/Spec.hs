@@ -71,6 +71,7 @@ main = defaultMain $
           , ep "{ix=1}{`2}" awk "test/data/ghc-pkg" "/Users/vanessa/.ghcup/ghc/9.10.1/lib/ghc-9.10.1/lib/../lib/aarch64-osx-ghc-9.10.1"
           , ep ".?{ix=1}{`0 ~* 1 /(\\d+\\.\\d+)/}" awk "test/data/r-version" "4.4"
           , harnessF "{ix=1}{[x+'\\n'+y]|>`$}" CSV "test/data/a.csv" "test/golden/csv-col.out"
+          , harnessF "[x+' '+y]|> ~.$0" awk "test/data/cdeps" "test/golden/mk-depends.out"
           ]
       , testGroup "eval"
           [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
