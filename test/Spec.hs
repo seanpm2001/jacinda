@@ -59,7 +59,7 @@ main = defaultMain $
           , ep ".?{|`1 ~* 1 /([^\\?]*)/}" awk "test/data/url" "https://soundcloud.com/shitzulover07/ayesha-erotica-vacation-bible-school"
           , harnessF "[x+' '+y]|>(sprintf'-L%s')¨.?{|`1 ~* 1 /([^']*site-packages)/}" awk "test/data/python-site" "test/golden/linker-flags.out"
           , harnessF "{%/hs-source-dirs/}{`2}" (AWK (Just "\\s*:\\s*") Nothing False) "jacinda.cabal" "test/golden/src-dirs.out"
-          , harnessF "@include'lib/prefixSizes.jac' prettyMem((+)|0.0 {ix>1}{`5:})" awk "test/data/ls" "73.82 kB"
+          , ep "@include'lib/prefixSizes.jac' prettyMem((+)|0.0 {ix>1}{`5:})" awk "test/data/ls" "73.82 kB"
           , ep "[y]|>{%/tags/}{`*}" (AWK (Just "/") Nothing False) "test/data/git-tags" "v1.7.4"
           , harnessF ".?{%/clang|mold|gold|GCC|GHC|rustc/}{`0 ~* 1 /^\\s*\\[[\\sa-f0-9]*\\]\\s*(.*$)/}" awk "test/data/readelf" "test/golden/compiler-version.out"
           , ep "~.{%/LANGUAGE\\s*.*\\s*#-/}{`3}" awk "src/Jacinda/Regex.hs" "OverloadedLists"
