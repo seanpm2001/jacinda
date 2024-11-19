@@ -77,6 +77,7 @@ main = defaultMain $
           , ep "[:|>[x ~* 1 /less-(\\d+)\\.tar\\.gz/]:?$0" awk "test/data/download.html" "668"
           , harnessF "{|sprintf '%s\\t%s\\tcall cursor(%s,%s)' (`2.`3.`4.(splitc `5 '-').1)}" (AWK (Just "[\\s+:]") Nothing False) "test/data/fut-ctags" "test/golden/ctags.out"
           , harnessF "{ix=1}{sprintf'CREATE TABLE c (%s);'([x+', '+y]|>[sprintf '%s TEXT' x]¨`$)}" CSV "test/data/food-prices.csv" "test/golden/sql.out"
+          , harnessF "{%/infix(r|l)? \\d+/}{sprintf '- fixity: %s' `0}" awk "src/A.hs" "test/golden/hlint-fix.out"
           ]
       , testGroup "eval"
           [ testCase "subs" $
