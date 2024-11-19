@@ -75,6 +75,7 @@ main = defaultMain $
           , harnessF "[x+' '+y]|> ~.{|subs /[^\\/]+\\/\\.\\.\\// '' `0}" awk "test/data/cdeps" "test/golden/mk-depends.out"
           , ep "[:|>.?{|`0 ~* 1 /less-(\\d+)\\.tar\\.gz/}" awk "test/data/download.html" "668"
           , harnessF "{|sprintf '%s\\t%s\\tcall cursor(%s,%s)' (`2.`3.`4.(splitc `5 '-').1)}" (AWK (Just "[\\s+:]") Nothing False) "test/data/fut-ctags" "test/golden/ctags.out"
+          , harnessF "{ix=1}{sprintf'CREATE TABLE c (%s);'([x+', '+y]|>[sprintf '%s TEXT' x]¨`$)}" CSV "test/data/food-prices.csv" "test/golden/sql.out"
           ]
       , testGroup "eval"
           [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
