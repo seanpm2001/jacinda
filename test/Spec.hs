@@ -62,6 +62,7 @@ main = defaultMain $
                 "test/data/python-site"
                 "-L/Users/vanessa/Library/Python/3.13/lib/python/site-packages -L/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages"
           , harnessF "{%/hs-source-dirs/}{`2}" (AWK (Just "\\s*:\\s*") Nothing False) "jacinda.cabal" "test/golden/src-dirs.out"
+          , harnessF ".?{|`0 ~* 1 /^\\s*hs-source-dirs:\\s*(.*)/}" awk "jacinda.cabal" "test/golden/src-dirs.out"
           -- , harnessF "[x+' '+y]|>$0" (AWK Nothing (Just "\\n\\s*") False) "vscode/syntaxes/jacinda.tmLanguage.json" "test/golden/minify.out"
           , ep "@include'lib/prefixSizes.jac' prettyMem((+)|0.0 {ix>1}{`5:})" awk "test/data/ls" "73.82 kB"
           , ep "[y]|>{%/tags/}{`*}" (AWK (Just "/") Nothing False) "test/data/git-tags" "v1.7.4"
