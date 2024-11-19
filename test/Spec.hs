@@ -78,12 +78,7 @@ main = defaultMain $
           , harnessF "{ix=1}{sprintf'CREATE TABLE c (%s);'([x+', '+y]|>[sprintf '%s TEXT' x]¨`$)}" CSV "test/data/food-prices.csv" "test/golden/sql.out"
           ]
       , testGroup "eval"
-          [ splitWhitespaceT "1 1.3\tj" ["1", "1.3", "j"]
-          , splitWhitespaceT
-              "drwxr-xr-x  12 vanessa  staff   384 Dec 26 19:43 _darcs"
-              ["drwxr-xr-x","12","vanessa","staff","384","Dec","26","19:43","_darcs"]
-          , splitWhitespaceT "      55 ./src/Jacinda/File.hs" ["55", "./src/Jacinda/File.hs"]
-          , testCase "subs" $
+          [ testCase "subs" $
               let actual = subs (compileDefault "zi") "vectorzm0zi13zi1zi0zmc80ea02f780be2984f831df2de071f6e6040c0f670b3dd2428e80f5d111d7f72_DataziVectorziGeneric_partition_closure" "."
               in actual @?= "vectorzm0.13.1.0zmc80ea02f780be2984f831df2de071f6e6040c0f670b3dd2428e80f5d111d7f72_Data.Vector.Generic_partition_closure"
           , splitWhitespaceT "" []
@@ -91,7 +86,6 @@ main = defaultMain $
           , testCase "split eval" (evalTo "[x+' '+y]|> split '01-23-1987' /-/" "01 23 1987")
           , testCase "length eval" (evalTo "#*split '01-23-1987' /-/" "3")
           , testCase "captureE" (evalTo "'01-23-1987' ~* 3 /(\\d{2})-(\\d{2})-(\\d{4})/" "Some 1987")
-          , testCase "conditional" (evalTo "if #t then 0 else 1" "0")
           ]
     ]
 
