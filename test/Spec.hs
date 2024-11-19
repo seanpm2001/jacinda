@@ -87,6 +87,7 @@ main = defaultMain $
           , testCase "length eval" (evalTo "#*split '01-23-1987' /-/" "3")
           , testCase "captureE" (evalTo "'01-23-1987' ~* 3 /(\\d{2})-(\\d{2})-(\\d{4})/" "Some 1987")
           , testCase "subs" (evalTo "subs /zi/ '.' 'vectorzm0zi13zi1zi0zmc80ea02f780be2984f831df2de071f6e6040c0f670b3dd2428e80f5d111d7f72_DataziVectorziGeneric_partition_closure'" "vectorzm0.13.1.0zmc80ea02f780be2984f831df2de071f6e6040c0f670b3dd2428e80f5d111d7f72_Data.Vector.Generic_partition_closure")
+          , testCase "basename" (evalTo "'test/data/py.py' ~* 2 /([^\\/]*\\/)*(.*)/" "Some py.py")
           ]
     ]
 
