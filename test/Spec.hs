@@ -80,14 +80,12 @@ main = defaultMain $
           , harnessF "{%/infix(r|l)? \\d+/}{sprintf '- fixity: %s' `0}" awk "src/A.hs" "test/golden/hlint-fix.out"
           ]
       , testGroup "eval"
-          [ testCase "subs" $
-              let actual = subs (compileDefault "zi") "vectorzm0zi13zi1zi0zmc80ea02f780be2984f831df2de071f6e6040c0f670b3dd2428e80f5d111d7f72_DataziVectorziGeneric_partition_closure" "."
-              in actual @?= "vectorzm0.13.1.0zmc80ea02f780be2984f831df2de071f6e6040c0f670b3dd2428e80f5d111d7f72_Data.Vector.Generic_partition_closure"
-          , splitWhitespaceT "" []
+          [ splitWhitespaceT "" []
           , splitWhitespaceT "5" ["5"]
           , testCase "split eval" (evalTo "[x+' '+y]|> split '01-23-1987' /-/" "01 23 1987")
           , testCase "length eval" (evalTo "#*split '01-23-1987' /-/" "3")
           , testCase "captureE" (evalTo "'01-23-1987' ~* 3 /(\\d{2})-(\\d{2})-(\\d{4})/" "Some 1987")
+          , testCase "subs" (evalTo "subs /zi/ '.' 'vectorzm0zi13zi1zi0zmc80ea02f780be2984f831df2de071f6e6040c0f670b3dd2428e80f5d111d7f72_DataziVectorziGeneric_partition_closure'" "vectorzm0.13.1.0zmc80ea02f780be2984f831df2de071f6e6040c0f670b3dd2428e80f5d111d7f72_Data.Vector.Generic_partition_closure")
           ]
     ]
 
