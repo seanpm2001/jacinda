@@ -78,6 +78,7 @@ main = defaultMain $
           , harnessF "{|sprintf '%s\\t%s\\tcall cursor(%s,%s)' (`2.`3.`4.(splitc `5 '-').1)}" (AWK (Just "[\\s+:]") Nothing False) "test/data/fut-ctags" "test/golden/ctags.out"
           , harnessF "{ix=1}{sprintf'CREATE TABLE c (%s);'([x+', '+y]|>[sprintf '%s TEXT' x]¨`$)}" CSV "test/data/food-prices.csv" "test/golden/sql.out"
           , harnessF "{%/infix(r|l)? \\d+/}{sprintf '- fixity: %s' `0}" awk "src/A.hs" "test/golden/hlint-fix.out"
+          , harnessF "{%/^PATH/}{`2}" (AWK (Just "=") Nothing False) "test/data/env" "test/golden/env.out"
           ]
       , testGroup "eval"
           [ splitWhitespaceT "" []
