@@ -347,17 +347,17 @@ in (total . white . black . draw) end
 # Get Version
 
 ```
-curl https://www.python.org/downloads/ | rg 'Python-(\d(\.\d+)*).tar.xz' -o -r '$1' | head -n1
+curl -s https://www.greenwoodsoftware.com/less/download.html | rg 'less-(\d+)\.tar\.gz' -o -r '$1' | head -n1
 ```
 
 ```
-curl -s https://www.python.org/downloads/ | ja '[:|>.?{|`0 ~* 1 /Python-(\d(\.\d+)*).tar.xz/}'
+curl -s https://www.greenwoodsoftware.com/less/download.html | ja '[:|>.?{|`0 ~* 1 /less-(\d+)\.tar\.gz/}'
 ```
 
 `[:|>` selects the first line in a stream by folding with the constant function `[:`.
 
 ```
-curl -s https://www.python.org/downloads/ | ja '[:|>[x ~* 1 /Python-(\d(\.\d+)*).tar.xz/]:?$0'
+curl -s https://www.greenwoodsoftware.com/less/download.html | ja '[:|>[x ~* 1 /less-(\d+)\.tar\.gz/]:?$0'
 ```
 
 This is perhaps not worth the loss in portability but it shows functional programming doing the heavy lifting (instead of toggling command-line flags).

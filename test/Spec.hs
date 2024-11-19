@@ -74,6 +74,7 @@ main = defaultMain $
           , harnessF "{ix=1}{[x+'\\n'+y]|>`$}" CSV "test/data/a.csv" "test/golden/csv-col.out"
           , harnessF "[x+' '+y]|> ~.{|subs /[^\\/]+\\/\\.\\.\\// '' `0}" awk "test/data/cdeps" "test/golden/mk-depends.out"
           , ep "[:|>.?{|`0 ~* 1 /less-(\\d+)\\.tar\\.gz/}" awk "test/data/download.html" "668"
+          , ep "[:|>[x ~* 1 /less-(\\d+)\\.tar\\.gz/]:?$0" awk "test/data/download.html" "668"
           , harnessF "{|sprintf '%s\\t%s\\tcall cursor(%s,%s)' (`2.`3.`4.(splitc `5 '-').1)}" (AWK (Just "[\\s+:]") Nothing False) "test/data/fut-ctags" "test/golden/ctags.out"
           , harnessF "{ix=1}{sprintf'CREATE TABLE c (%s);'([x+', '+y]|>[sprintf '%s TEXT' x]¨`$)}" CSV "test/data/food-prices.csv" "test/golden/sql.out"
           ]
