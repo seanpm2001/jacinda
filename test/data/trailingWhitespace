@@ -1,0 +1,7 @@
+aeval (EApp (Arr oSh _) (EApp _ (Builtin _ Map) f) xs) t a 
+    | tX@(Arr xSh _) <- eAnn xs
+    , Just xRnk <- staRnk xSh
+    , Just ((ta0, rnk0), (ta1, rnk1)) <- mAA (eAnn f)
+    , Just sz0 <- nSz ta0, Just sz1 <- nSz ta1 = do
+    y <- nI; y0 <- nI
+    szR <- nI; szY <- nI

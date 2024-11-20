@@ -46,6 +46,7 @@ extra-source-files:
     test/data/python-site
     test/data/r-version
     test/data/readelf
+    test/data/trailingWhitespace
     test/data/url
 
 source-repository head
