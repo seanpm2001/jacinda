@@ -23,6 +23,7 @@
 - [x] ⍬
 # Features
 - [x] keep `rs`?
+- [ ] properly handle right-associative operations (for one)
 - [ ] set variables on the command-line?
   - [ ] `fd` has `{}`, `{/}`, etc. so one could use it to pass in filenames
     while invoking...
@@ -84,6 +85,7 @@
 - [ ] `.[ ... ]` dfn where you specify that it's binary?
 - [x] `?` for if... then?
 - [ ] infix foldMap
+- [ ] fold-maybe
 - [ ] lineLength := (#")
 - [ ] `{\<pat>}. $0` ... filter on stream expressions
   - [x] or #: maybe?
