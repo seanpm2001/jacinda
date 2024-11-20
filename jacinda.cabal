@@ -31,6 +31,7 @@ extra-source-files:
     test/golden/*.out
     test/data/a.csv
     test/data/cabal-info
+    test/data/cabal-plan
     test/data/cdeps
     test/data/download.html
     test/data/env

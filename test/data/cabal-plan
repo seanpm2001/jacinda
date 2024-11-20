@@ -1,0 +1,12 @@
+apple:flib:apple  /Users/vanessa/dev/haskell/apple/dist-newstyle/build/aarch64-osx/ghc-9.10.1/apple-0.3.0.0/f/apple/build/apple/libapple.dylib
+apple:bench:apple-bench  /Users/vanessa/dev/haskell/apple/dist-newstyle/build/aarch64-osx/ghc-9.10.1/apple-0.3.0.0/b/apple-bench/build/apple-bench/apple-bench
+apple:test:apple-o  /Users/vanessa/dev/haskell/apple/dist-newstyle/build/aarch64-osx/ghc-9.10.1/apple-0.3.0.0/t/apple-o/build/apple-o/apple-o
+apple:test:apple-test  /Users/vanessa/dev/haskell/apple/dist-newstyle/build/aarch64-osx/ghc-9.10.1/apple-0.3.0.0/t/apple-test/build/apple-test/apple-test
+apple:exe:arepl  /Users/vanessa/dev/haskell/apple/dist-newstyle/build/aarch64-osx/ghc-9.10.1/apple-0.3.0.0/x/arepl/build/arepl/arepl
+apple:exe:atc  /Users/vanessa/dev/haskell/apple/dist-newstyle/build/aarch64-osx/ghc-9.10.1/apple-0.3.0.0/x/atc/build/atc/atc
+apple:exe:writeo  /Users/vanessa/dev/haskell/apple/dist-newstyle/build/aarch64-osx/ghc-9.10.1/apple-0.3.0.0/x/writeo/build/writeo/writeo
+c2hs:exe:c2hs  /Users/vanessa/.local/state/cabal/store/ghc-9.10.1-64dd/c2hs-0.28.8-3e2168d2/bin/c2hs
+criterion:exe:criterion-report  /Users/vanessa/.local/state/cabal/store/ghc-9.10.1-64dd/crtrn-1.6.4.0-d85ffb3c/bin/criterion-report
+happy:exe:happy  /Users/vanessa/.local/state/cabal/store/ghc-9.10.1-64dd/hppy-2.1.3-52f20e2f/bin/happy
+hsc2hs:exe:hsc2hs  /Users/vanessa/.local/state/cabal/store/ghc-9.10.1-64dd/hsc2hs-0.68.10-86ce5d7f/bin/hsc2hs
+alex:exe:alex  /Users/vanessa/.local/state/cabal/store/ghc-9.10.1-64dd/lx-3.5.1.0-20231e5c/bin/alex
