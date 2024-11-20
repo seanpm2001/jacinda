@@ -294,7 +294,7 @@ a boolean expression.
 [y]|> {|`0~/^$/}
 :   Is the last line blank?
 
-{|option ⍬ [x] (`0 ~* 1 /^((\\s+\\S|\\S)*)\s*$/)}
+{|option ⍬ [x] (`0 ~* 1 /^((\\s+\\S|\\S)\*)\\s*$/)}
 :   Trim trailing whitespace
 
 ja -R\'\\n\\s*\' \"[x+\' \'+y]|>\\$0\"
