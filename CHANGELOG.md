@@ -1,4 +1,7 @@
+# 3.3.0.0
+
   * Allow decimal specifiers in format strings
+  * Add `--header` (and `:set header;`) which includes match in record.
 
 # 3.2.0.1
 
