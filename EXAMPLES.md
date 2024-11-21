@@ -24,6 +24,19 @@ This is simpler than:
 cabal list --simple | cut -d' ' -f1 | sort -u
 ```
 
+# Get Latest Version (Cabal)
+
+```
+cabal info splitmix \
+    | ja -R '\n[^:\n]*:' -b -F'\s*,\s*' '[x ~* 1 /(\d+(\.\d+)*)/]:?{%/Versions available:/}{[y]|>`$}'
+```
+
+# Prune Branches (Git)
+
+```
+git branch --contains | ja '{%/^[^\*]/}{`0}' | xargs git branch -d
+```
+
 # Create SQL Table From CSV
 
 ```bash
