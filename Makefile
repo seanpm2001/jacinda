@@ -1,3 +1,5 @@
+.PHONY: clean install release darwin-release fmt fix check
+
 MAKEFLAGS += --warn-undefined-variables --no-builtin-rules -j
 
 HC ?= ghc
