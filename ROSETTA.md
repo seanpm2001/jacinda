@@ -380,3 +380,15 @@ awk -F'[/:]+' '{ sub("^www\.", "", $2); print $2 }'
 ```
 ja -F'[/:]+' "{|sub1 /^www\./ '' \`2}"
 ```
+
+# OpenSSL Directory
+
+```
+openssl version -d | cut -f2 -d\"
+/usr/local/ssl
+```
+
+```
+openssl version -d | ja -F\" '$2'
+/usr/local/ssl
+```
