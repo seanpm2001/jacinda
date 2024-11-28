@@ -26,9 +26,9 @@ cF AllColumn{} = Nothing; cF FParseAllCol{} = Nothing; cF IParseAllCol{} = Nothi
 cF Guarded{} = Nothing; cF Implicit{} = Nothing
 cF Lit{} = Nothing; cF RegexLit{} = Nothing;
 cF NB{} = Nothing; cF UB{} = Nothing; cF BB{} = Nothing; cF TB{} = Nothing
-cF Var{} = Nothing; cF (Tup _ es) = foldMapAlternative cF es; cF (Anchor _ es) = foldMapAlternative cF es
-cF (Arr _ es) = foldMapAlternative cF es; cF (Rec _ es) = foldMapAlternative (cF.snd) es; cF (EApp _ e e') = cF e <|> cF e'
-cF (Cond _ p e e') = cF p <|> cF e <|> cF e'; cF (OptionVal _ e) = foldMapAlternative cF e
+cF Var{} = Nothing; cF (Tup _ es) = cF||>es; cF (Anchor _ es) = cF||>es
+cF (Arr _ es) = cF||>es; cF (Rec _ es) = (cF.snd) ||> es; cF (EApp _ e e') = cF e <|> cF e'
+cF (Cond _ p e e') = cF p <|> cF e <|> cF e'; cF (OptionVal _ e) = cF||>e
 cF (Lam _ _ e) = cF e; cF Let{} = error "Inlining unexpectedly failed?"
 cF RC{} = error "Sanity check failed. Regex should not be compiled at this time."
 cF Dfn{} = desugar; cF Paren{} = desugar; cF ResVar{} = desugar
@@ -37,7 +37,7 @@ cF RwB{} = desugar; cF RwT{} = desugar
 isS :: T -> Bool
 isS (TyB TyStream:$_) = True; isS _ = False
 
-foldMapAlternative :: (Traversable t, Alternative f) => (a -> f b) -> t a -> f b
-foldMapAlternative f xs = asum (f <$> xs)
+(||>) :: (Traversable t, Alternative f) => (a -> f b) -> t a -> f b
+f ||> xs = asum (f <$> xs)
 
 desugar = error "Internal error. Should have been desugared by now."
