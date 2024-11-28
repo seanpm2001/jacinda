@@ -52,12 +52,12 @@ printenv | ja -F= '{%/^PATH/}{`2}'
 
 # Documentation
 
-See the [guide](https://vmchale.github.io/jacinda/) (archived on [Hackage](https://hackage.haskell.org/package/jacinda/src/doc/guide.pdf), which contains a tutorial
+See the [guide](https://vmchale.github.io/jacinda/) (archived on [Hackage](https://hackage.haskell.org/package/jacinda/src/doc/guide.pdf)), which contains a tutorial
 on some of the features as well as examples.
 
 The [manpages](https://hackage.haskell.org/package/jacinda/src/man/ja.1) document the builtins and provide a syntax reference.
 
-See the [rosetta](./ROSETTA.md) showing AWK alongside, or the [examples][./EXAMPLES.md] for its own capabilities.
+See the [rosetta](./ROSETTA.md) showing AWK alongside, or the [examples](./EXAMPLES.md) for its own capabilities.
 
 # Status
 
