@@ -16,7 +16,7 @@ import           Test.Tasty
 import           Test.Tasty.Golden    (goldenVsString)
 import           Test.Tasty.HUnit
 
-eio :: FilePath -- ^ Source filename
+eio :: Maybe FilePath -- ^ Source filename
     -> T.Text
     -> Mode
     -> FilePath -- ^ Input
@@ -32,7 +32,7 @@ ep :: T.Text
    -> BSL.ByteString -- ^ Expected output
    -> TestTree
 ep e m fp expected = testCase (T.unpack e) $ do
-    actual <- eio undefined e m fp
+    actual <- eio Nothing e m fp
     actual @?= expected <> "\n"
 
 harnessF e m fp o = goldenVsString (T.unpack e) o $ eio undefined e m fp
@@ -43,7 +43,7 @@ harness :: FilePath -- ^ Source file
         -> FilePath -- ^ Expected output
         -> TestTree
 harness src m fp o =
-    goldenVsString src o $ do {t <- TIO.readFile src; eio src t m fp}
+    goldenVsString src o $ do {t <- TIO.readFile src; eio (Just src) t m fp}
 
 main :: IO ()
 main = defaultMain $

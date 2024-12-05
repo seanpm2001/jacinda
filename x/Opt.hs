@@ -130,12 +130,12 @@ ap _ _ _ fs rs              = AWK fs rs
 
 run :: Cmd -> IO ()
 run (TC fp is)                         = tcIO is fp =<< TIO.readFile fp
-run (Run fp fs rs Nothing is vs h)    = do { contents <- TIO.readFile fp ; runStdin is fp contents vs (AWK fs rs h) }
-run (Run fp fs rs (Just dat) is vs h) = do { contents <- TIO.readFile fp ; runOnFile is fp contents vs (AWK fs rs h) dat stdout }
+run (Run fp fs rs Nothing is vs h)    = do { contents <- TIO.readFile fp ; runStdin is (Just fp) contents vs (AWK fs rs h) }
+run (Run fp fs rs (Just dat) is vs h) = do { contents <- TIO.readFile fp ; runOnFile is (Just fp) contents vs (AWK fs rs h) dat stdout }
 run (Expr eb f fs a u c rs is h)      =
     case f of
-        Nothing -> runStdin is "(no file info)" eb [] (m h)
-        Just fp -> runOnFile is "(no file info)" eb [] (m h) fp stdout
+        Nothing -> runStdin is Nothing eb [] (m h)
+        Just fp -> runOnFile is Nothing eb [] (m h) fp stdout
   where
     m = ap a u c fs rs
 run (Eval e)                          = print (exprEval e)

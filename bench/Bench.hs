@@ -9,7 +9,7 @@ import qualified Data.Text.IO    as TIO
 import           File
 import           System.IO       (IOMode (WriteMode), withFile)
 
-hrun ifp e m fp = withFile "/dev/null" WriteMode $ \h -> runOnFile [] "(bench)" e [] m fp h
+hrun ifp e m fp = withFile "/dev/null" WriteMode $ \h -> runOnFile [] Nothing e [] m fp h
 runs e m fp = nfIO $ hrun "(bench)" e m fp
 fruns ifp m fp = nfIO $ do { contents <- TIO.readFile ifp; hrun ifp contents m fp }
 

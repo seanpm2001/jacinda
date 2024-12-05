@@ -10,7 +10,7 @@ import           Control.Applicative              ((<|>))
 import           Control.Exception                (Exception, throw, throwIO)
 import           Control.Monad.IO.Class           (liftIO)
 import           Control.Monad.Trans.State.Strict (StateT, get, put, runState, runStateT)
-import           Data.Bifunctor                   (second)
+import           Data.Bifunctor                   (first, second)
 import qualified Data.ByteString                  as BS
 import qualified Data.ByteString.Lazy             as BSL
 import qualified Data.ByteString.Lazy.Char8       as ASCIIL
@@ -58,18 +58,18 @@ parseLib incls fp = do
         Right (st', ([], ds)) -> put st' $> (rwD <$> ds)
         Right (st', (is, ds)) -> do {put st'; dss <- traverse (parseLib incls) is; pure (concat dss ++ fmap rwD ds)}
 
-parseP :: [FilePath] -> FilePath -> T.Text -> [(T.Text, Value)] -> StateT AlexUserState IO (Program AlexPosn)
+parseP :: [FilePath] -> Maybe FilePath -> T.Text -> [(T.Text, Value)] -> StateT AlexUserState IO (Program AlexPosn)
 parseP incls fn src var = do
     st <- get
     case parseWithCtx src var st of
-        Left err -> liftIO $ throwIO (FPos fn<$>err)
+        Left err -> liftIO $ throwIO (srcErr fn err)
         Right (st', (is, Program ds e)) -> do
             put st'
             dss <- traverse (parseLib incls) is
             pure $ Program (concat dss ++ fmap rwD ds) (rwE e)
 
 -- | Parse + rename
-parsePWithMax :: [FilePath] -> FilePath -> T.Text -> [(T.Text, T.Text)] -> IO (Program AlexPosn, Int)
+parsePWithMax :: [FilePath] -> Maybe FilePath -> T.Text -> [(T.Text, T.Text)] -> IO (Program AlexPosn, Int)
 parsePWithMax incls fn src vars = uncurry rP.swap.second fst3 <$> runStateT (parseP incls fn src vars) alexInitUserState
     where fst3 (x,_,_) = x
 
@@ -79,8 +79,9 @@ parseWithMax' = fmap (uncurry rP . second (rwP.snd)) . parseWithMax
 type FileBS = BS.ByteString
 
 data FPos = FPos { filen :: String, pos :: !AlexPosn }
+          | CLI { pos :: !AlexPosn }
 
-instance Pretty FPos where pretty (FPos f l) = pretty f <> ":" <> pretty l
+instance Pretty FPos where pretty (FPos f l) = pretty f <> ":" <> pretty l; pretty (CLI l) = pretty l
 
 tcompile=compileDefault.encodeUtf8
 
@@ -141,7 +142,7 @@ compileFS = maybe defaultRurePtr tcompile
 
 runOnBytes :: [FilePath]
            -> FilePath -- ^ Data file name, for @nf@
-           -> FilePath -- ^ For error locations
+           -> Maybe FilePath -- ^ For error locations
            -> T.Text -- ^ Program
            -> [(T.Text, Value)]
            -> Mode
@@ -151,7 +152,7 @@ runOnBytes :: [FilePath]
 runOnBytes incls fp fn src vars mode contents h = do
     incls' <- defaultIncludes <*> pure incls
     (ast, m) <- parsePWithMax incls' fn src vars
-    (typed, i) <- yIO fn $ runTyM m (tyP ast)
+    (typed, i) <- yIO $ first (srcErr fn) $ runTyM m (tyP ast)
     let (eI, j) = ib i typed
     m'Throw $ cF eI
     let (e', k) = runState (eta eI) j
@@ -169,7 +170,7 @@ runOnBytes incls fp fn src vars mode contents h = do
         (_, CSV) -> let ctxs = csvCtx contents in cont ctxs
 
 runStdin :: [FilePath]
-         -> FilePath -- ^ For error location
+         -> Maybe FilePath -- ^ For error location
          -> T.Text -- ^ Program
          -> [(T.Text, Value)]
          -> Mode
@@ -177,7 +178,7 @@ runStdin :: [FilePath]
 runStdin is src fn vars m = do {b <- BSL.hGetContents stdin; runOnBytes is "(stdin)" src fn vars m b stdout}
 
 runOnFile :: [FilePath]
-          -> FilePath
+          -> Maybe FilePath
           -> T.Text
           -> [(T.Text, Value)]
           -> Mode
@@ -189,15 +190,16 @@ runOnFile is fn e vs m fp h = do {b <- BSL.readFile fp; runOnBytes is fp fn e vs
 tcIO :: [FilePath] -> FilePath -> T.Text -> IO ()
 tcIO incls fn src = do
     incls' <- defaultIncludes <*> pure incls
-    (ast, m) <- parsePWithMax incls' fn src []
-    (pT, i) <- yIO fn $ runTyM m (tyP ast)
+    (ast, m) <- parsePWithMax incls' (Just fn) src []
+    (pT, i) <- yIO $ first (FPos fn<$>) $ runTyM m (tyP ast)
     let (eI, _) = ib i pT
     m'Throw $ cF eI
 
 m'Throw :: Exception e => Maybe e -> IO ()
 m'Throw = traverse_ throwIO
 
-yIO fp = either (throwIO.(FPos fp<$>)) pure
+yIO = either throwIO pure
+srcErr fp = fmap (maybe CLI FPos fp)
 
 yeet :: Exception e => Either e a -> a
 yeet = either throw id
