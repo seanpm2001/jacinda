@@ -1,5 +1,6 @@
 # Get Latest Version from Hackage
 
-```
-cabal info dom-lt | ja -R ':' -F'(\s|,)+' 'last#¨([#*x>0] #. {|(~/^\d+(\.\d+)*$/)#.`$})'
+```zsh
+cabal info splitmix | \
+    ja --header -R'\n[^:\n]*:' -F'\s*,\s*' '[x ~* 1 /(\d+(\.\d+)*)/]:?{%/Versions available:/}{[y]|>`$}'
 ```
