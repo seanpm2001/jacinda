@@ -84,8 +84,8 @@ mkLam ns e = foldr (\n -> Lam (loc n) n) e ns
 hasY :: E a -> Bool
 hasY = g where
     g (ResVar _ Y)           = True
-    g (Tup _ es)             = any g es
-    g (Rec _ es)             = any (g.snd) es
+    g (Tup _ es)             = g!|es
+    g (Rec _ es)             = (g.snd)!|es
     g (OptionVal _ (Just e)) = g e
     g (EApp _ e0 e1)         = g e0 || g e1
     g Dfn{}                  = error "nested dfns not yet implemented"
@@ -94,10 +94,15 @@ hasY = g where
     g (Paren _ e)            = g e
     g (Guarded _ p e)        = g p || g e
     g (Implicit _ e)         = g e
-    g (Arr _ es)             = any g es
-    g (Anchor _ es)          = any g es
+    g (Arr _ es)             = g!|es
+    g (Anchor _ es)          = g!|es
     g (Cond _ p e0 e1)       = g e0 || g e1 || g p
     g _                      = False
+
+    infixr 6 !|
+
+    (!|) :: Foldable t => (a -> Bool) -> t a -> Bool
+    (!|) = any
 
 replaceXY :: (a -> Nm a) -- ^ @x@
           -> (a -> Nm a) -- ^ @y@
