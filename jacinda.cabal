@@ -29,6 +29,8 @@ extra-source-files:
     examples/*.jac
     examples/otool/*.jac
     test/golden/*.out
+    test/golden/*.bib
+    test/data/*.nbib
     test/data/a.csv
     test/data/cabal-info
     test/data/cabal-plan
@@ -64,7 +66,7 @@ common warnings
         -Wincomplete-uni-patterns -Wincomplete-record-updates
         -Wredundant-constraints -Widentities -Wcpp-undef
         -Wmissing-export-lists -Wunused-packages -Wno-x-partial
-        -Wno-missing-signatures
+        -Wno-missing-signatures -Wredundant-bang-patterns
 
 library jacinda-lib
     import:           warnings

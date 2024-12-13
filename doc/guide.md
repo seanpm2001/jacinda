@@ -337,30 +337,47 @@ path"$0
 
 ### Define Values on the Command-Line
 
-We can jerry-rig a [RIS](https://en.wikipedia.org/wiki/RIS_(file_format)) to [.bib](https://en.wikipedia.org/wiki/BibTeX#Database_files) converter:
+We can jerry-rig a [PubMed](https://support.nlm.nih.gov/kbArticle/?pn=KA-05477) to [.bib](https://en.wikipedia.org/wiki/BibTeX#Database_files) converter:
 
 ```
-:set fs:=/  -\s*/;
+:set rs:=/\r\n/;
 
-fn bib(ty) :=
-   ?ty='JOUR';'article'
-  ;?ty='BOOK';'book'
-  ;?ty='CONF';'inproceedings'
-  ;'misc';
+fn doi(record) :=
+  record ~* 1 /([^ ]*) \[doi/;
+
+fn year(dd) :=
+  dd ~* 1 /(\d{4})/;
+
+fn pfield(label,r) :=
+  '    ' + label + '={' + r + '},';
+
+fn collateAu(r) :=
+  r ~* 1 /^FAU - (.*)$/;
+
+fn bind(f,x) :=
+  option None f x;
+
+fn texpaginate() := sub1 /-/ '--';
 
 fn field(r) :=
-   ?r='AU';Some 'author'
-  ;?r='PY';Some 'year'
-  ;?r='TI';Some 'title'
-  ;?r='VL';Some 'volume'
-  ;?r='JO';Some 'journal'
-  ;?r='DO';Some 'doi'
-  ;None;
+  let
+    val key := r ~* 1 /^([A-Z ]{4})-/
+    val value := r ~* 2 /^([A-Z ]{4})-\s*(.*)/
+  in
+     ?key=Some 'TI  ';(pfield 'title')¨value
+    ;?key=Some 'AID ';(pfield 'doi')¨bind doi value
+    ;?key=Some 'DP  ';(pfield 'year')¨bind year value
+    ;?key=Some 'JT  ';(pfield 'journal')¨value
+    ;?key=Some 'VI  ';(pfield 'volume')¨value
+    ;?key=Some 'IP  ';(pfield 'number')¨value
+    ;?key=Some 'PG  ';(λr. pfield 'pages' (texpaginate r))¨value
+    ;None
+  end;
 
-.?{| ?`1='TY';Some ('@'+bib `2+'{'+name+',')
-    ;?`1='ER';Some '}'
-    ;?`1='UR';Some ('    url={\\url{'+`2+'}},')
-    ;['    '+x+'={'+`2+'},']¨(field `1)}
+let
+  val au := ',\n    author={'+([x+' and '+y]|>(collateAu:?$0))+'},\n'
+  val rec := [x+'\n'+y]|>(field:?$0)
+in '@article{'+name+au+rec+'\n}' end
 ```
 
 Running this on its own will fail:
@@ -372,12 +389,16 @@ ja: 22:36 'name' is not in scope.
 We can specify `name` per-invocation like so:
 
 ```
-> ja run ris2bib.jac -i shannon.ris -Dname='shannon1948'
-@article{shannon1948,
-    author={Shannon, Claude E.},
-    year={1948},
-    title={A Mathematical Theory of Communication},
-    volume={27},
+ > ja run pubmed2tex.jac -i 22078126.nbib -Dname=arnold2012
+@article{arnold2012,
+    author={Arnold, Arthur P},
+    volume={28},
+    number={2},
+    year={2012},
+    title={The end of gonad-centric sex determination in mammals.},
+    pages={55--61},
+    journal={Trends in genetics : TIG},
+    doi={10.1016/j.tig.2011.10.004},
 }
 ```
 
