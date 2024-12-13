@@ -32,6 +32,7 @@ extra-source-files:
     test/golden/*.bib
     test/data/*.nbib
     test/data/a.csv
+    test/data/Cargo.lock
     test/data/cabal-info
     test/data/cabal-plan
     test/data/cdeps
