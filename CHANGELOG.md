@@ -1,3 +1,5 @@
+# 3.3.0.1
+
   * Equality on optional values no longer crashes
 
 # 3.3.0.0
