@@ -1,3 +1,5 @@
+  * Equality on optional values no longer crashes
+
 # 3.3.0.0
 
   * Allow decimal specifiers in format strings
