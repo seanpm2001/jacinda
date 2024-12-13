@@ -505,39 +505,60 @@ path&quot;$0</code></pre>
 <h3 id="define-values-on-the-command-line">Define Values on the
 Command-Line</h3>
 <p>We can jerry-rig a <a
-href="https://en.wikipedia.org/wiki/RIS_(file_format)">RIS</a> to <a
-href="https://en.wikipedia.org/wiki/BibTeX#Database_files">.bib</a>
+href="https://support.nlm.nih.gov/kbArticle/?pn=KA-05477">PubMed</a> to
+<a href="https://en.wikipedia.org/wiki/BibTeX#Database_files">.bib</a>
 converter:</p>
-<pre><code>:set fs:=/  -\s*/;
+<pre><code>:set rs:=/\r\n/;
 
-fn bib(ty) :=
-   ?ty=&#39;JOUR&#39;;&#39;article&#39;
-  ;?ty=&#39;BOOK&#39;;&#39;book&#39;
-  ;?ty=&#39;CONF&#39;;&#39;inproceedings&#39;
-  ;&#39;misc&#39;;
+fn doi(record) :=
+  record ~* 1 /([^ ]*) \[doi/;
+
+fn year(dd) :=
+  dd ~* 1 /(\d{4})/;
+
+fn pfield(label,r) :=
+  &#39;    &#39; + label + &#39;={&#39; + r + &#39;},&#39;;
+
+fn collateAu(r) :=
+  r ~* 1 /^FAU - (.*)$/;
+
+fn bind(f,x) :=
+  option None f x;
+
+fn texpaginate() := sub1 /-/ &#39;--&#39;;
 
 fn field(r) :=
-   ?r=&#39;AU&#39;;Some &#39;author&#39;
-  ;?r=&#39;PY&#39;;Some &#39;year&#39;
-  ;?r=&#39;TI&#39;;Some &#39;title&#39;
-  ;?r=&#39;VL&#39;;Some &#39;volume&#39;
-  ;?r=&#39;JO&#39;;Some &#39;journal&#39;
-  ;?r=&#39;DO&#39;;Some &#39;doi&#39;
-  ;None;
+  let
+    val key := r ~* 1 /^([A-Z ]{4})-/
+    val value := r ~* 2 /^([A-Z ]{4})-\s*(.*)/
+  in
+     ?key=Some &#39;TI  &#39;;(pfield &#39;title&#39;)¨value
+    ;?key=Some &#39;AID &#39;;(pfield &#39;doi&#39;)¨bind doi value
+    ;?key=Some &#39;DP  &#39;;(pfield &#39;year&#39;)¨bind year value
+    ;?key=Some &#39;JT  &#39;;(pfield &#39;journal&#39;)¨value
+    ;?key=Some &#39;VI  &#39;;(pfield &#39;volume&#39;)¨value
+    ;?key=Some &#39;IP  &#39;;(pfield &#39;number&#39;)¨value
+    ;?key=Some &#39;PG  &#39;;(λr. pfield &#39;pages&#39; (texpaginate r))¨value
+    ;None
+  end;
 
-.?{| ?`1=&#39;TY&#39;;Some (&#39;@&#39;+bib `2+&#39;{&#39;+name+&#39;,&#39;)
-    ;?`1=&#39;ER&#39;;Some &#39;}&#39;
-    ;?`1=&#39;UR&#39;;Some (&#39;    url={\\url{&#39;+`2+&#39;}},&#39;)
-    ;[&#39;    &#39;+x+&#39;={&#39;+`2+&#39;},&#39;]¨(field `1)}</code></pre>
+let
+  val au := &#39;,\n    author={&#39;+([x+&#39; and &#39;+y]|&gt;(collateAu:?$0))+&#39;},\n&#39;
+  val rec := [x+&#39;\n&#39;+y]|&gt;(field:?$0)
+in &#39;@article{&#39;+name+au+rec+&#39;\n}&#39; end</code></pre>
 <p>Running this on its own will fail:</p>
 <pre><code>ja: 22:36 &#39;name&#39; is not in scope.</code></pre>
 <p>We can specify <code>name</code> per-invocation like so:</p>
-<pre><code>&gt; ja run ris2bib.jac -i shannon.ris -Dname=&#39;shannon1948&#39;
-@article{shannon1948,
-    author={Shannon, Claude E.},
-    year={1948},
-    title={A Mathematical Theory of Communication},
-    volume={27},
+<pre><code> &gt; ja run pubmed2tex.jac -i 22078126.nbib -Dname=arnold2012
+@article{arnold2012,
+    author={Arnold, Arthur P},
+    volume={28},
+    number={2},
+    year={2012},
+    title={The end of gonad-centric sex determination in mammals.},
+    pages={55--61},
+    journal={Trends in genetics : TIG},
+    doi={10.1016/j.tig.2011.10.004},
 }</code></pre>
 <h1 id="learning-examples">Learning Examples</h1>
 <p>To get a flavor of Jacinda, see how it can be used in place of
