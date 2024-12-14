@@ -22,10 +22,10 @@ class HasRenames a where
 instance HasRenames Renames where rename=id
 
 boundLens :: Lens' Renames (IM.IntMap Int)
-boundLens f s = fmap (\x -> s { bound = x }) (f (bound s))
+boundLens f (Rs m b) = Rs m <$> f b
 
 maxLens :: Lens' Renames Int
-maxLens f s = fmap (\x -> s { max_ = x }) (f (max_ s))
+maxLens f (Rs m b) = (\x -> Rs x b) <$> f m
 
 type RenameM = State Renames
 
